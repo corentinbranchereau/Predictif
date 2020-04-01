@@ -24,12 +24,12 @@ public abstract class Utilisateur implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nom;
-    private String prenom;
+    protected Long id;
+    protected String nom;
+    protected String prenom;
     @Column(unique = true)
-    private String email;
-    private String mdp;
+    protected String email;
+    protected String mdp;
 
     protected Utilisateur() {
     }

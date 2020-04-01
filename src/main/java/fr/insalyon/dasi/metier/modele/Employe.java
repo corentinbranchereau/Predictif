@@ -17,7 +17,7 @@ public class Employe extends Utilisateur implements Serializable {
     
     private boolean genre; //true: homme , false: femme
     private boolean enLigne;
-    private int tempsTravail;
+    private Integer tempsTravail;
 
     protected Employe() {
     }
@@ -45,7 +45,7 @@ public class Employe extends Utilisateur implements Serializable {
         this.enLigne = enLigne;
     }
 
-    public int getTempsTravail() {
+    public Integer getTempsTravail() {
         return tempsTravail;
     }
 

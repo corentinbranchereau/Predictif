@@ -1,9 +1,12 @@
 package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -18,6 +21,12 @@ public class Client extends Utilisateur implements Serializable {
     private String adresse_postale;
     private String telephone;
     
+    @OneToOne
+    private ProfilAstral profilAstral;
+    
+    @OneToMany
+    private ArrayList<Consultation> consultations;
+
     
     protected Client() {
     }
@@ -27,8 +36,29 @@ public class Client extends Utilisateur implements Serializable {
         this.dateNaissance = dateNaissance;
         this.adresse_postale = adresse_postale;
         this.telephone = telephone;
+        this.profilAstral=null;
+        this.consultations=new ArrayList<>();
     }
 
+    public ArrayList<Consultation> getConsultations() {
+        return consultations;
+    }
+
+    public void setConsultations(ArrayList<Consultation> consultations) {
+        this.consultations = consultations;
+    }
+
+     
+     
+     
+    public ProfilAstral getProfilAstral() {
+        return profilAstral;
+    }
+
+    public void setProfilAstral(ProfilAstral profilAstral) {
+        this.profilAstral = profilAstral;
+    }
+    
     public Date getDateNaissance() {
         return dateNaissance;
     }
