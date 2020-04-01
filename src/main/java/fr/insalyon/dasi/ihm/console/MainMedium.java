@@ -6,6 +6,7 @@ import fr.insalyon.dasi.metier.modele.Cartomancien;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.Spirite;
 import fr.insalyon.dasi.metier.service.Service;
+import fr.insalyon.dasi.metier.service.ServiceMedium;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +43,8 @@ public class MainMedium {
 
     public static void initialiserMediums() {
         
+        ServiceMedium serviceMedium = new ServiceMedium(); 
+        
         System.out.println();
         System.out.println("**** initialiserMediums() ****");
         System.out.println();
@@ -70,26 +73,12 @@ public class MainMedium {
         
         System.out.println();
 
-        try {
-            em.getTransaction().begin();
-            em.persist(gwenaëlle);
-            em.persist(tran);
-            em.persist(irma);
-            em.persist(endora);
-            em.persist(serena);
-            em.persist(m);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service", ex);
-            try {
-                em.getTransaction().rollback();
-            }
-            catch (IllegalStateException ex2) {
-                // Ignorer cette exception...
-            }
-        } finally {
-            em.close();
-        }
+        serviceMedium.inscrireMedium(gwenaëlle);
+        serviceMedium.inscrireMedium(tran);
+        serviceMedium.inscrireMedium(irma);
+        serviceMedium.inscrireMedium(endora);
+        serviceMedium.inscrireMedium(serena);
+        serviceMedium.inscrireMedium(m);
 
         System.out.println();
         System.out.println("** Médiums après persistance: ");

@@ -33,12 +33,14 @@ public class Consultation implements Serializable{
     @ManyToOne
     private Medium medium;
     
+    
     @ManyToOne
     private Employe employe;
     
+    
     @ManyToOne
     private Client client;
-
+    
     public Consultation() {
     }
 
@@ -48,6 +50,7 @@ public class Consultation implements Serializable{
         this.commentaire = commentaire;
         this.medium = null;
         this.employe = null;
+        this.client=null;
     }
     
       public Long getId() {
@@ -85,7 +88,7 @@ public class Consultation implements Serializable{
     public void setMedium(Medium medium) {
         this.medium = medium;
     }
-
+    
     public Employe getEmploye() {
         return employe;
     }
@@ -101,8 +104,7 @@ public class Consultation implements Serializable{
     public void setClient(Client client) {
         this.client = client;
     }
-    
-    
+
    
     @Override
     public String toString() {

@@ -3,6 +3,7 @@ package fr.insalyon.dasi.metier.modele;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -24,10 +25,9 @@ public class Client extends Utilisateur implements Serializable {
     @OneToOne
     private ProfilAstral profilAstral;
     
-    @OneToMany
-    private ArrayList<Consultation> consultations;
+    @OneToMany(mappedBy="client")
+    private List<Consultation> consultations;
 
-    
     protected Client() {
     }
     
@@ -37,19 +37,17 @@ public class Client extends Utilisateur implements Serializable {
         this.adresse_postale = adresse_postale;
         this.telephone = telephone;
         this.profilAstral=null;
-        this.consultations=new ArrayList<>();
+        //this.consultations=new ArrayList<>();
     }
 
-    public ArrayList<Consultation> getConsultations() {
+     
+    public List<Consultation> getConsultations() {
         return consultations;
     }
 
-    public void setConsultations(ArrayList<Consultation> consultations) {
+    public void setConsultations(List<Consultation> consultations) {
         this.consultations = consultations;
     }
-
-     
-     
      
     public ProfilAstral getProfilAstral() {
         return profilAstral;
