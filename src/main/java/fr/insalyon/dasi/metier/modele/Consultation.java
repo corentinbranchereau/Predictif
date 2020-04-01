@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 
@@ -28,6 +29,15 @@ public class Consultation implements Serializable{
     private Date dateDebut;
     private Integer duree; //minutes
     private String commentaire;
+    
+    @ManyToOne
+    private Medium medium;
+    
+    @ManyToOne
+    private Employe employe;
+    
+    @ManyToOne
+    private Client client;
 
     public Consultation() {
     }
@@ -36,8 +46,9 @@ public class Consultation implements Serializable{
         this.dateDebut = dateDebut;
         this.duree = duree;
         this.commentaire = commentaire;
+        this.medium = null;
+        this.employe = null;
     }
-
     
       public Long getId() {
         return id;
@@ -67,6 +78,32 @@ public class Consultation implements Serializable{
         this.commentaire = commentaire;
     }
 
+    public Medium getMedium() {
+        return medium;
+    }
+
+    public void setMedium(Medium medium) {
+        this.medium = medium;
+    }
+
+    public Employe getEmploye() {
+        return employe;
+    }
+
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+    
+    
+   
     @Override
     public String toString() {
         return "Consultation{" + "dateDebut=" + dateDebut + ", duree=" + duree + ", commentaire=" + commentaire + '}';

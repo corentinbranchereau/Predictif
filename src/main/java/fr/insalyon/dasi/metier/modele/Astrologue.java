@@ -16,12 +16,12 @@ import javax.persistence.Entity;
 public class Astrologue extends Medium implements Serializable {
     
     private String formation;
-    private int promotion;
+    private Integer promotion;
     
     protected Astrologue() {
     }
     
-    public Astrologue(String denomination, boolean genre, String presentation, String formation, int promotion) {
+    public Astrologue(String denomination, boolean genre, String presentation, String formation, Integer promotion) {
         super(denomination,genre,presentation);
         this.formation=formation;
         this.promotion=promotion;
@@ -35,11 +35,11 @@ public class Astrologue extends Medium implements Serializable {
         this.formation = formation;
     }
 
-    public int getPromotion() {
+    public Integer getPromotion() {
         return promotion;
     }
 
-    public void setPromotion(int promotion) {
+    public void setPromotion(Integer promotion) {
         this.promotion = promotion;
     }
     

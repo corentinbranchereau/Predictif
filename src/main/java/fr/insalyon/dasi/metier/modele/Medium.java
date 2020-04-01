@@ -23,10 +23,10 @@ public abstract class Medium implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String denomination;
-    private boolean genre;
-    private String presentation;
+    protected Long id;
+    protected String denomination;
+    protected boolean genre;
+    protected String presentation;
     
     protected Medium() {
     }
