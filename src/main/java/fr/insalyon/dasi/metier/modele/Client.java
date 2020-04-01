@@ -37,7 +37,7 @@ public class Client extends Utilisateur implements Serializable {
         this.adresse_postale = adresse_postale;
         this.telephone = telephone;
         this.profilAstral=null;
-        //this.consultations=new ArrayList<>();
+        this.consultations=new ArrayList<>();
     }
 
      
@@ -83,13 +83,6 @@ public class Client extends Utilisateur implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString()+"Client{" + "dateNaissance=" + dateNaissance + ", adresse_postale=" + adresse_postale + ", telephone=" + telephone + '}';
+        return super.toString() + "type=Client, dateNaissance=" + dateNaissance + ", adresse_postale=" + adresse_postale + ", telephone=" + telephone + ", " + profilAstral;
     }
-
-
-   
-
-
-    
-
 }

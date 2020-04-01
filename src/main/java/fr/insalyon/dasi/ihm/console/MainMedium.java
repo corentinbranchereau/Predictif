@@ -3,6 +3,7 @@ package fr.insalyon.dasi.ihm.console;
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Astrologue;
 import fr.insalyon.dasi.metier.modele.Cartomancien;
+import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.Spirite;
 import fr.insalyon.dasi.metier.service.Service;
@@ -27,9 +28,10 @@ public class MainMedium {
         JpaUtil.init();
 
         initialiserMediums();            // Question 3
-        
+       
         testerListeMedium();
         testerListeMediumTriée();
+        testerRechercheMedium();
         //testerInscriptionClient();       // Question 4 & 5
         //testerRechercheClient();         // Question 6
         //testerListeClients();            // Question 7
@@ -42,6 +44,10 @@ public class MainMedium {
 
     public static void afficherMedium(Medium medium) {
         System.out.println("-> " + medium);
+    }
+    
+    public static void afficherEmploye(Employe employe) {
+        System.out.println("-> " + employe);
     }
 
     public static void initialiserMediums() {
@@ -94,6 +100,44 @@ public class MainMedium {
         System.out.println();
     }
     
+    public static void testerRechercheMedium() {
+        
+        System.out.println();
+        System.out.println("**** testerRechercheMedium() ****");
+        System.out.println();
+        
+        ServiceMedium serviceMedium = new ServiceMedium(); 
+        long id;
+        Medium medium;
+
+        id = 1;
+        System.out.println("** Recherche du Médium #" + id);
+        medium = serviceMedium.detailMediumParId(id);
+        if (medium != null) {
+            afficherMedium(medium);
+        } else {
+            System.out.println("=> Médium non-trouvé");
+        }
+
+        id = 3;
+        System.out.println("** Recherche du Médium #" + id);
+        medium = serviceMedium.detailMediumParId(id);
+        if (medium != null) {
+            afficherMedium(medium);
+        } else {
+            System.out.println("=> Médium non-trouvé");
+        }
+
+        id = 17;
+        System.out.println("** Recherche du Médium #" + id);
+        medium = serviceMedium.detailMediumParId(id);
+        if (medium != null) {
+            afficherMedium(medium);
+        } else {
+            System.out.println("=> Médium #" + id + " non-trouvé");
+        }
+    }
+    
     public static void testerListeMedium() {
         
         System.out.println();
@@ -102,7 +146,7 @@ public class MainMedium {
         
         ServiceMedium serviceMedium = new ServiceMedium();
         
-        List<Medium> listeMediums = serviceMedium.ListeMedium();
+        List<Medium> listeMediums = serviceMedium.listeMedium();
         System.out.println("*** Liste des Médiums (non triée)");
         if (listeMediums != null) {
             for (Medium medium : listeMediums) {
@@ -122,7 +166,7 @@ public class MainMedium {
         
         ServiceMedium serviceMedium = new ServiceMedium();
         
-        List<Medium> listeMediums = serviceMedium.ListeMediumTriée();
+        List<Medium> listeMediums = serviceMedium.listeMediumTriée();
         System.out.println("*** Liste des Médiums triée");
         if (listeMediums != null) {
             for (Medium medium : listeMediums) {
@@ -131,6 +175,48 @@ public class MainMedium {
         }
         else {
             System.out.println("=> ERREUR...");
+        }
+    }
+    
+    public static void testerAuthentificationEmploye() {
+        
+        System.out.println();
+        System.out.println("**** testerAuthentificationEmploye() ****");
+        System.out.println();
+        
+        ServiceMedium serviceMedium = new ServiceMedium();
+        Employe employe;
+        String mail;
+        String motDePasse;
+
+        mail = "ada.lovelace@insa-lyon.fr";
+        motDePasse = "Ada1012";
+        employe = serviceMedium.authentifierEmploye(mail, motDePasse);
+        if (employe != null) {
+            System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
+            afficherEmploye(employe);
+        } else {
+            System.out.println("Authentification échouée avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
+        }
+
+        mail = "ada.lovelace@insa-lyon.fr";
+        motDePasse = "Ada2020";
+        employe = serviceMedium.authentifierEmploye(mail, motDePasse);
+        if (employe != null) {
+            System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
+            afficherEmploye(employe);
+        } else {
+            System.out.println("Authentification échouée avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
+        }
+
+        mail = "etudiant.fictif@insa-lyon.fr";
+        motDePasse = "********";
+        employe = serviceMedium.authentifierEmploye(mail, motDePasse);
+        if (employe != null) {
+            System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
+            afficherEmploye(employe);
+        } else {
+            System.out.println("Authentification échouée avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
         }
     }
 }

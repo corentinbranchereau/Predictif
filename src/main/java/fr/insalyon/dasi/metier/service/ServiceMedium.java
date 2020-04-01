@@ -5,8 +5,10 @@
  */
 package fr.insalyon.dasi.metier.service;
 
+import fr.insalyon.dasi.dao.EmployeDao;
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.dao.MediumDao;
+import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Medium;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,6 +21,28 @@ import java.util.logging.Logger;
 public class ServiceMedium {
     
     protected MediumDao mediumDao = new MediumDao();
+    protected EmployeDao employeDao = new EmployeDao();
+    
+    public Employe authentifierEmploye(String mail, String motDePasse) {
+        Employe resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            // Recherche de l'employe
+            Employe employe = employeDao.chercherParMail(mail);
+            if (employe != null) {
+                // Vérification du mot de passe
+                if (employe.getMdp().equals(motDePasse)) {
+                    resultat = employe;
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service authentifierEmploye(mail,motDePasse)", ex);
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
     
     public Long inscrireMedium(Medium medium) {
         Long resultat = null;
@@ -38,7 +62,7 @@ public class ServiceMedium {
         return resultat;
     }
     
-    public List<Medium> ListeMedium() {
+    public List<Medium> listeMedium() {
         List<Medium> resultat = null;
         JpaUtil.creerContextePersistance();
         try {
@@ -52,15 +76,29 @@ public class ServiceMedium {
         return resultat;
     }
     
-    public List<Medium> ListeMediumTriée() {
+    public List<Medium> listeMediumTriée() {
         List<Medium> resultat = null;
         JpaUtil.creerContextePersistance();
         try {
-            resultat.addAll(mediumDao.listerSpirites());
+            resultat = mediumDao.listerSpirites();
             resultat.addAll(mediumDao.listerCartomanciens());
             resultat.addAll(mediumDao.listerAstrologues());
         } catch (Exception ex) {
             Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service listeMediumDisponibleTriée()", ex);
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
+    public Medium detailMediumParId(Long clientId) {
+        Medium resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = mediumDao.chercherParId(clientId);
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service DetailMediumParId(id)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();

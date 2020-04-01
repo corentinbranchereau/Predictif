@@ -21,6 +21,11 @@ public class MediumDao {
         em.persist(medium);
     }
     
+    public Medium chercherParId(Long mediumid) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        return em.find(Medium.class, mediumid);
+    }
+    
     public List<Medium> listerMediums() {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         TypedQuery<Medium> query = em.createQuery("SELECT m FROM Medium m ORDER BY m.denomination ASC", Medium.class);

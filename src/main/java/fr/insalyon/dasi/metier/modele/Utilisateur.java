@@ -81,7 +81,7 @@ public abstract class Utilisateur implements Serializable {
 
     @Override
     public String toString() {
-        return "Utilisateur{" + "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", mdp=" + mdp + '}';
+        return "Utilisateur : id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", mdp=" + mdp;
     }
 
 }

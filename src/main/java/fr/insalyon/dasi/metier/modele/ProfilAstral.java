@@ -72,4 +72,8 @@ public class ProfilAstral implements Serializable {
         this.animalTotem = animalTotem;
     }
     
+    @Override
+    public String toString() {
+        return "Profil Astral {signeZodiaque=" + signeZodiaque + ", signeAstroChinois=" + signeAstroChinois + ", couleur=" + couleur + ", animalTotem=" + animalTotem + "}";
+    }
 }

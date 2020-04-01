@@ -6,6 +6,7 @@
 package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -32,6 +33,7 @@ public class Employe extends Utilisateur implements Serializable {
         this.genre = genre;
         this.enLigne = enLigne;
         this.tempsTravail = tempsTravail;
+        this.consultations = new ArrayList();
     }
 
     public boolean isGenre() {
@@ -64,5 +66,10 @@ public class Employe extends Utilisateur implements Serializable {
 
     public void setConsultations(List<Consultation> consultations) {
         this.consultations = consultations;
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + "type=Employe, genre=" + genre + ", enLigne=" + enLigne + "tempsTravail=" + tempsTravail;
     }
 }
