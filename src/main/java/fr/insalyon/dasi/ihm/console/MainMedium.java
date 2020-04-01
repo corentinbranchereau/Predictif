@@ -27,6 +27,9 @@ public class MainMedium {
         JpaUtil.init();
 
         initialiserMediums();            // Question 3
+        
+        testerListeMedium();
+        testerListeMediumTriée();
         //testerInscriptionClient();       // Question 4 & 5
         //testerRechercheClient();         // Question 6
         //testerListeClients();            // Question 7
@@ -89,5 +92,45 @@ public class MainMedium {
         afficherMedium(serena);
         afficherMedium(m);
         System.out.println();
+    }
+    
+    public static void testerListeMedium() {
+        
+        System.out.println();
+        System.out.println("**** testerListeMedium() ****");
+        System.out.println();
+        
+        ServiceMedium serviceMedium = new ServiceMedium();
+        
+        List<Medium> listeMediums = serviceMedium.ListeMedium();
+        System.out.println("*** Liste des Médiums (non triée)");
+        if (listeMediums != null) {
+            for (Medium medium : listeMediums) {
+                afficherMedium(medium);
+            }
+        }
+        else {
+            System.out.println("=> ERREUR...");
+        }
+    }
+    
+    public static void testerListeMediumTriée() {
+        
+        System.out.println();
+        System.out.println("**** testerListeMediumTriée() ****");
+        System.out.println();
+        
+        ServiceMedium serviceMedium = new ServiceMedium();
+        
+        List<Medium> listeMediums = serviceMedium.ListeMediumTriée();
+        System.out.println("*** Liste des Médiums triée");
+        if (listeMediums != null) {
+            for (Medium medium : listeMediums) {
+                afficherMedium(medium);
+            }
+        }
+        else {
+            System.out.println("=> ERREUR...");
+        }
     }
 }
