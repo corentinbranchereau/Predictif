@@ -1,78 +1,67 @@
 package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
-import javax.persistence.Column;
+import java.util.Date;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author DASI Team
  */
 @Entity
-public class Client implements Serializable {
+public class Client extends Utilisateur implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nom;
-    private String prenom;
-    @Column(unique = true)
-    private String mail;
-    private String motDePasse;
-
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateNaissance;
+    private String adresse_postale;
+    private String telephone;
+    
+    
     protected Client() {
     }
-
-    public Client(String nom, String prenom, String mail, String motDePasse) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.mail = mail;
-        this.motDePasse = motDePasse;
+    
+     public Client(String nom, String prenom, String email, String mdp, Date dateNaissance, String adresse_postale, String telephone) {
+        super(nom, prenom, email, mdp);
+        this.dateNaissance = dateNaissance;
+        this.adresse_postale = adresse_postale;
+        this.telephone = telephone;
     }
 
-    public Long getId() {
-        return id;
+    public Date getDateNaissance() {
+        return dateNaissance;
     }
 
-    public String getNom() {
-        return nom;
+    public void setDateNaissance(Date dateNaissance) {
+        this.dateNaissance = dateNaissance;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public String getAdresse_postale() {
+        return adresse_postale;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public void setAdresse_postale(String adresse_postale) {
+        this.adresse_postale = adresse_postale;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getMotDePasse() {
-        return motDePasse;
-    }
-
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     @Override
     public String toString() {
-        return "Client : id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", motDePasse=" + motDePasse;
+        return super.toString()+"Client{" + "dateNaissance=" + dateNaissance + ", adresse_postale=" + adresse_postale + ", telephone=" + telephone + '}';
     }
+
+
+   
+
+
     
 
 }

@@ -16,13 +16,13 @@ import javax.persistence.Persistence;
  */
 public class Main {
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
 
         // TODO : Pensez à créer une unité de persistance "DASI-PU" et à vérifier son nom dans la classe JpaUtil
         // Contrôlez l'affichage du log de JpaUtil grâce à la méthode log de la classe JpaUtil
         JpaUtil.init();
 
-        initialiserClients();            // Question 3
+       //initialiserClients();            // Question 3
         //testerInscriptionClient();       // Question 4 & 5
         //testerRechercheClient();         // Question 6
         //testerListeClients();            // Question 7
@@ -308,4 +308,5 @@ public class Main {
         System.out.println();
 
     }
+*/
 }

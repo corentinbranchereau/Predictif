@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * @author DASI Team
  */
 public class Service {
-
+/*
     protected ClientDao clientDao = new ClientDao();
 
     public Long inscrireClient(Client client) {
@@ -81,5 +81,5 @@ public class Service {
         }
         return resultat;
     }
-
+*/
 }
