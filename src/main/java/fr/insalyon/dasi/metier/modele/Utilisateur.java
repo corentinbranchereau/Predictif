@@ -30,6 +30,7 @@ public abstract class Utilisateur implements Serializable {
     @Column(unique = true)
     protected String email;
     protected String mdp;
+    protected boolean estConnecte;
 
     protected Utilisateur() {
     }
@@ -41,6 +42,7 @@ public abstract class Utilisateur implements Serializable {
         this.prenom = prenom;
         this.email = email;
         this.mdp = mdp;
+        this.estConnecte=false;
     }
     
     public Long getId() {
@@ -78,6 +80,15 @@ public abstract class Utilisateur implements Serializable {
     public void setMdp(String mdp) {
         this.mdp = mdp;
     }
+
+    public boolean isEstConnecte() {
+        return estConnecte;
+    }
+
+    public void setEstConnecte(boolean estConnecte) {
+        this.estConnecte = estConnecte;
+    }
+    
 
     @Override
     public String toString() {

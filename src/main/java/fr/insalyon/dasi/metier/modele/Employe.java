@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 public class Employe extends Utilisateur implements Serializable {
     
     private boolean genre; //true: homme , false: femme
-    private boolean enLigne;
+    private boolean enConsultation;
     private Integer tempsTravail;
     
     @OneToMany(mappedBy="employe")
@@ -28,10 +28,10 @@ public class Employe extends Utilisateur implements Serializable {
     protected Employe() {
     }
 
-    public Employe(boolean genre, boolean enLigne, int tempsTravail, String nom, String prenom, String email, String mdp) {
+    public Employe(boolean genre, boolean enConsultation, int tempsTravail, String nom, String prenom, String email, String mdp) {
         super(nom, prenom, email, mdp);
         this.genre = genre;
-        this.enLigne = enLigne;
+        this.enConsultation = enConsultation;
         this.tempsTravail = tempsTravail;
         this.consultations = new ArrayList();
     }
@@ -44,12 +44,12 @@ public class Employe extends Utilisateur implements Serializable {
         this.genre = genre;
     }
 
-    public boolean isEnLigne() {
-        return enLigne;
+    public boolean isEnConsultation() {
+        return enConsultation;
     }
 
-    public void setEnLigne(boolean enLigne) {
-        this.enLigne = enLigne;
+    public void setEnConsultation(boolean enConsultation) {
+        this.enConsultation = enConsultation;
     }
 
     public Integer getTempsTravail() {
@@ -70,6 +70,6 @@ public class Employe extends Utilisateur implements Serializable {
     
     @Override
     public String toString() {
-        return super.toString() + "type=Employe, genre=" + genre + ", enLigne=" + enLigne + "tempsTravail=" + tempsTravail;
+        return super.toString() + "type=Employe, genre=" + genre + ", enLigne=" + enConsultation + "tempsTravail=" + tempsTravail;
     }
 }
