@@ -83,6 +83,6 @@ public class Client extends Utilisateur implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "type=Client, dateNaissance=" + dateNaissance + ", adresse_postale=" + adresse_postale + ", telephone=" + telephone + ", " + profilAstral;
+        return super.toString() + ", type=Client, dateNaissance=" + dateNaissance + ", adresse_postale=" + adresse_postale + ", telephone=" + telephone + ", " + profilAstral;
     }
 }
