@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -25,7 +26,7 @@ public class Client extends Utilisateur implements Serializable {
     @OneToOne
     private ProfilAstral profilAstral;
     
-    @OneToMany(mappedBy="client")
+    @OneToMany(mappedBy="client", cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Consultation> consultations;
 
     protected Client() {
@@ -40,6 +41,15 @@ public class Client extends Utilisateur implements Serializable {
         this.consultations=new ArrayList<>();
     }
 
+     
+     public void addConsultation(Consultation consultation)
+    {
+        this.consultations.add(consultation);
+        if(consultation.getClient() != this)
+        {
+            consultation.setClient(this);
+        }
+    }
      
     public List<Consultation> getConsultations() {
         return consultations;

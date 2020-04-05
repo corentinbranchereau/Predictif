@@ -7,6 +7,7 @@ import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.Spirite;
 import fr.insalyon.dasi.metier.service.Service;
+import fr.insalyon.dasi.metier.service.ServiceEmploye;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
 import java.util.List;
 import java.util.logging.Level;
@@ -184,14 +185,15 @@ public class MainMedium {
         System.out.println("**** testerAuthentificationEmploye() ****");
         System.out.println();
         
-        ServiceMedium serviceMedium = new ServiceMedium();
+        ServiceEmploye serviceEmploye = new ServiceEmploye();
+        
         Employe employe;
         String mail;
         String motDePasse;
 
         mail = "ada.lovelace@insa-lyon.fr";
         motDePasse = "Ada1012";
-        employe = serviceMedium.authentifierEmploye(mail, motDePasse);
+        employe = serviceEmploye.authentifierEmploye(mail, motDePasse);
         if (employe != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherEmploye(employe);
@@ -201,7 +203,7 @@ public class MainMedium {
 
         mail = "ada.lovelace@insa-lyon.fr";
         motDePasse = "Ada2020";
-        employe = serviceMedium.authentifierEmploye(mail, motDePasse);
+        employe = serviceEmploye.authentifierEmploye(mail, motDePasse);
         if (employe != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherEmploye(employe);
@@ -211,7 +213,7 @@ public class MainMedium {
 
         mail = "etudiant.fictif@insa-lyon.fr";
         motDePasse = "********";
-        employe = serviceMedium.authentifierEmploye(mail, motDePasse);
+        employe = serviceEmploye.authentifierEmploye(mail, motDePasse);
         if (employe != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherEmploye(employe);

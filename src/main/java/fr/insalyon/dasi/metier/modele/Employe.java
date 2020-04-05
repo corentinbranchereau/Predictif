@@ -8,6 +8,7 @@ package fr.insalyon.dasi.metier.modele;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -22,7 +23,7 @@ public class Employe extends Utilisateur implements Serializable {
     private boolean enConsultation;
     private Integer tempsTravail;
     
-    @OneToMany(mappedBy="employe")
+    @OneToMany(mappedBy="employe",cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Consultation> consultations;
 
     protected Employe() {
@@ -34,6 +35,15 @@ public class Employe extends Utilisateur implements Serializable {
         this.enConsultation = enConsultation;
         this.tempsTravail = tempsTravail;
         this.consultations = new ArrayList();
+    }
+    
+    public void addConsultation(Consultation consultation)
+    {
+        this.consultations.add(consultation);
+        if(consultation.getEmploye() != this)
+        {
+            consultation.setEmploye(this);
+        }
     }
 
     public boolean isGenre() {

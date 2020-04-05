@@ -15,17 +15,17 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public class ClientDao{
     
-    public static void creer(Client client){
+    public void creer(Client client){
         EntityManager em = JpaUtil.obtenirContextePersistance();
         em.persist(client);
     }
     
-    public static void sauvegarderProfilAstral(ProfilAstral profil){
+    public void sauvegarderProfilAstral(ProfilAstral profil){
         EntityManager em = JpaUtil.obtenirContextePersistance();
         em.persist(profil);
     }
     
-    public static Client chercherParEmail(String clientEmail) {
+    public Client chercherParEmail(String clientEmail) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c WHERE c.email = :mail", Client.class);
         query.setParameter("mail", clientEmail); // correspond au paramètre ":mail" dans la requête
@@ -37,34 +37,16 @@ public class ClientDao{
         return result;
     }
     
-    public static Client modifierClient(Client clientModifie){
+    public Client modifier(Client clientModifie){
         
          EntityManager em = JpaUtil.obtenirContextePersistance();
          Client resultat=em.merge(clientModifie);
          return resultat;
     }
     
-    public static List<Consultation> obtenirListeConsultation(Client client){
-         EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Consultation> query = em.createQuery("SELECT c.consultations FROM Client c WHERE c.email = :mail", Consultation.class);
-        query.setParameter("mail", client.getEmail()); // correspond au paramètre ":mail" dans la requête
-        List<Consultation> result = query.getResultList();
-        
-        return result;
-    }
-    
-    public static Client chercherParId(Long clientId) {
+    public Client chercherParId(Long clientId) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         return em.find(Client.class, clientId); // renvoie null si l'identifiant n'existe pas
     }
     
-    /*
-    
-    public List<Client> listerClients() {
-        EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c ORDER BY c.nom ASC, c.prenom ASC", Client.class);
-        return query.getResultList();
-    }
-    */
-    // modifier / supprimer  ... 
 }

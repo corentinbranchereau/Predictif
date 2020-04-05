@@ -31,29 +31,29 @@ public class ServiceConsultation {
     ConsultationDao consultationDao=new ConsultationDao();
             
             
-    public Long ajouterConsultation(Consultation consultation,Client client, Employe employe, Medium medium){ //permet d'ajouter une consultation dans la bd
+    public Long ajouterConsultation(Consultation consultation){ //permet d'ajouter une consultation dans la bd
                                                                     //les liste consultations de client et employé sont maj automatiquement par l'entity manager     
         Long resultat = null;
         
-        if(client.getId()!=null && employe.getId()!=null && medium.getId()!=null){
-            // clientDao.chercherParId();
+        if(consultation.getClient() !=null && consultation.getEmploye() !=null && consultation.getMedium() !=null){      
+            JpaUtil.creerContextePersistance();
+            try {
+                JpaUtil.ouvrirTransaction();
+                consultationDao.creer(consultation);
+                clientDao.modifier(consultation.getClient());
+                employeDao.modifier(consultation.getEmploye());
+                JpaUtil.validerTransaction();
+                resultat = consultation.getId();
+            } catch (Exception ex) {
+                Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
+                JpaUtil.annulerTransaction();
+                resultat = null;
+            }
+            finally {
+                JpaUtil.fermerContextePersistance();
+            }      
         }
         
-        JpaUtil.creerContextePersistance();
-        try {
-            JpaUtil.ouvrirTransaction();
-            consultationDao.creerConsultation(consultation);
-            JpaUtil.validerTransaction();
-            resultat = consultation.getId();
-        } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
-            JpaUtil.annulerTransaction();
-            resultat = null;
-        }
-        finally {
-            JpaUtil.fermerContextePersistance();
-        }      
         return resultat;
     }
-    
 }

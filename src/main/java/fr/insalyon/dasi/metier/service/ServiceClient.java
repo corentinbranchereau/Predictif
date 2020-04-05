@@ -12,6 +12,8 @@ import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 
 import java.util.List;
 
@@ -24,12 +26,14 @@ import java.util.logging.Logger;
  */
 public class ServiceClient {
     
+    protected ClientDao clientDao = new ClientDao();
+    
     public Long inscrireClient(Client client) {
         Long resultat = null;
         JpaUtil.creerContextePersistance();
         try {
             JpaUtil.ouvrirTransaction();
-            ClientDao.creer(client);
+            clientDao.creer(client);
             JpaUtil.validerTransaction();
             resultat = client.getId();
         } catch (Exception ex) {
@@ -48,13 +52,13 @@ public class ServiceClient {
         JpaUtil.creerContextePersistance();
         try {
             // Recherche de l'utilsateur
-            Client client = ClientDao.chercherParEmail(email);
+            Client client = clientDao.chercherParEmail(email);
             if (client != null) {
                 // Vérification du mot de passe
                 if (client.getMdp().equals(mdp)) {
                     client.setEstConnecte(true);
                     JpaUtil.ouvrirTransaction();
-                    resultat=ClientDao.modifierClient(client);
+                    resultat=clientDao.modifier(client);
                     JpaUtil.validerTransaction();
                 }
             }
@@ -73,7 +77,7 @@ public class ServiceClient {
         Client resultat=null;
         try {
            JpaUtil.ouvrirTransaction();
-           resultat=ClientDao.modifierClient(client);
+           resultat=clientDao.modifier(client);
            JpaUtil.validerTransaction();
         } catch (Exception ex) {
             Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service déconnecterClient(client)", ex);
@@ -93,7 +97,7 @@ public class ServiceClient {
         ProfilAstral profilClient=new ProfilAstral(profil.get(0),profil.get(1),profil.get(2),profil.get(3));
         try {
             JpaUtil.ouvrirTransaction();
-            ClientDao.sauvegarderProfilAstral(profilClient);
+            clientDao.sauvegarderProfilAstral(profilClient);
             JpaUtil.validerTransaction();
             resultat = profilClient;
         } catch (Exception ex) {
@@ -106,7 +110,7 @@ public class ServiceClient {
            try {
               JpaUtil.ouvrirTransaction();
               client.setProfilAstral(profilClient);
-               client=ClientDao.modifierClient(client);
+              client=clientDao.modifier(client);
               JpaUtil.validerTransaction();
            } catch (Exception ex) {
                Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service GenererProfilAstral(client)", ex);
@@ -122,19 +126,14 @@ public class ServiceClient {
     
     
     public List<Consultation> HistoriqueClientTrié(Client client){
-        JpaUtil.creerContextePersistance();
-        List<Consultation> resultat=null;
-        try {
-           JpaUtil.ouvrirTransaction();
-           resultat=ClientDao.obtenirListeConsultation(client);
-           JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service déconnecterClient(client)", ex);
-            JpaUtil.annulerTransaction();
-        }
-        finally {
-            JpaUtil.fermerContextePersistance();
-        }
+        List<Consultation> resultat = client.getConsultations();
+        Collections.sort(resultat,new Comparator<Consultation>() {
+            public int compare(Consultation c1, Consultation c2) {
+                //Si des erreurs de NULL, à ajouter ici.
+                return c1.getDateDebut().compareTo(c2.getDateDebut());
+            }
+        });
+        Collections.reverse(resultat); //les plus récentes d'abord
         return resultat;   
     }
     

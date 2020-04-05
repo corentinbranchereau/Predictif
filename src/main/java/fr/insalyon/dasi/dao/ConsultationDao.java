@@ -14,8 +14,10 @@ import javax.persistence.EntityManager;
  */
 public class ConsultationDao {
     
-    public void creerConsultation(Consultation consultation){
+    public void creer(Consultation consultation){
         EntityManager em = JpaUtil.obtenirContextePersistance();
         em.persist(consultation);
     }
+   
+
 }

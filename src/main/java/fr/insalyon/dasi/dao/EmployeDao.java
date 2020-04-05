@@ -21,6 +21,12 @@ public class EmployeDao {
         em.persist(employe);
     }
     
+    public Employe modifier(Employe employeModifie) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        Employe resultat = em.merge(employeModifie);
+        return resultat;
+    }
+    
     public Employe chercherParMail(String employeMail) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         TypedQuery<Employe> query = em.createQuery("SELECT e FROM Employe e WHERE e.mail = :mail", Employe.class);
@@ -33,8 +39,9 @@ public class EmployeDao {
         return result;
     }
     
-    public static Employe chercherParId(Long employeId) {
+    public Employe chercherParId(Long employeId) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         return em.find(Employe.class, employeId); // renvoie null si l'identifiant n'existe pas
     }
+    
 }

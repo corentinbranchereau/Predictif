@@ -7,6 +7,7 @@ package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -95,6 +96,10 @@ public class Consultation implements Serializable{
 
     public void setEmploye(Employe employe) {
         this.employe = employe;
+        if(!employe.getConsultations().contains(this))
+        {
+            employe.addConsultation(this);
+        }
     }
 
     public Client getClient() {
@@ -103,8 +108,11 @@ public class Consultation implements Serializable{
 
     public void setClient(Client client) {
         this.client = client;
+        if(!client.getConsultations().contains(this))
+        {
+            client.addConsultation(this);
+        }
     }
-
    
     @Override
     public String toString() {

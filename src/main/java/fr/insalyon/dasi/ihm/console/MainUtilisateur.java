@@ -5,6 +5,7 @@
  */
 package fr.insalyon.dasi.ihm.console;
 
+import fr.insalyon.dasi.dao.ConsultationDao;
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Cartomancien;
 import fr.insalyon.dasi.metier.modele.Client;
@@ -13,6 +14,7 @@ import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.service.ServiceClient;
 import fr.insalyon.dasi.metier.service.ServiceConsultation;
+import fr.insalyon.dasi.metier.service.ServiceEmploye;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
 import java.io.IOException;
 import java.text.ParseException;
@@ -37,11 +39,15 @@ public class MainUtilisateur {
         JpaUtil.init();
         initialiserClients();
         //testInscrireClients();
-        testAuthentifierClient();
-        testDeconnecterClient();
+        //testAuthentifierClient();
+        //testDeconnecterClient();
         
         testGenererProfilAstral();
-        testObtenirHistoriqueClient();
+        
+        testAjouterHistoriqueClient("sidiparisi@orange.fr", "123sidia");
+        
+        testObtenirHistoriqueClient("sidiparisi@orange.fr", "123sidia");
+        
         JpaUtil.destroy();
     }
 
@@ -224,6 +230,12 @@ public class MainUtilisateur {
     }
 
     public static void testDeconnecterClient(){
+        
+        System.out.println();
+        System.out.println("**** testDeconnecterClient() ****");
+        System.out.println(); 
+        
+        
         ServiceClient service=new ServiceClient();
         String mail="michelpouche@yahoo.fr";
         String mdp="polucheisking";
@@ -243,6 +255,11 @@ public class MainUtilisateur {
     }
     
      public static void testGenererProfilAstral(){
+        
+        System.out.println();
+        System.out.println("**** testGenererProfilAstral() ****");
+        System.out.println(); 
+        
         ServiceClient service=new ServiceClient();
         String mail="michelpouche@yahoo.fr";
         String mdp="polucheisking";
@@ -265,41 +282,55 @@ public class MainUtilisateur {
                
         
     }
-     
-     public static void testObtenirHistoriqueClient(){
+   
+    public static void testAjouterHistoriqueClient(String mail, String motDePasse)
+    {
+        
+        System.out.println();
+        System.out.println("**** testAjouterHistoriqueClient() ****");
+        System.out.println();
+        
         ServiceClient serviceClient = new ServiceClient();
         ServiceMedium serviceMedium = new ServiceMedium();
+        ServiceEmploye serviceEmploye = new ServiceEmploye();
         ServiceConsultation serviceConsultation=new ServiceConsultation();
-        Client client;
-        String mail;
-        String motDePasse;
         
+        Client client = serviceClient.authentifierClient(mail, motDePasse);
         
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
-        mail = "sidiparisi@orange.fr";
-        motDePasse = "123sidia";
-        client = serviceClient.authentifierClient(mail, motDePasse);
         Medium irma = new Cartomancien("Mme Irma", false, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
         Employe patrick= new Employe(true,false,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
-        //Ajouter des consultations au client
         serviceMedium.inscrireMedium(irma);
-        serviceMedium.inscrireEmploye(patrick);
+        serviceEmploye.inscrireEmploye(patrick);
+        
+        //Ajouter des consultations au client
+      
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
         Date date=null;
         try{
             date=simpleDateFormat.parse("11-01-2020");
-        }catch(ParseException e){
-            
-        }
+        }catch(ParseException e){}
+        
         Consultation consultation=new Consultation(date,45,"Super séance!");
         consultation.setEmploye(patrick);
-        consultation.setMedium(irma);
         consultation.setClient(client);
-        //serviceConsultation.ajouterConsultation(consultation);
+        consultation.setMedium(irma);
         
+        serviceConsultation.ajouterConsultation(consultation);
         
+    }
+     
+    public static void testObtenirHistoriqueClient(String mail, String motDePasse){
         
-                
-        List<Consultation> historique=serviceClient.HistoriqueClientTrié(client);
+        System.out.println();
+        System.out.println("**** testObtenirHistoriqueClient() ****");
+        System.out.println(); 
+        
+        ServiceClient serviceClient = new ServiceClient();
+        
+        Client client = serviceClient.authentifierClient(mail, motDePasse);
+        
+        List<Consultation> historique=client.getConsultations();
+        
          for (Consultation c : historique) {
              System.out.println(c);
          }
