@@ -33,4 +33,8 @@ public class EmployeDao {
         return result;
     }
     
+    public static Employe chercherParId(Long employeId) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        return em.find(Employe.class, employeId); // renvoie null si l'identifiant n'existe pas
+    }
 }

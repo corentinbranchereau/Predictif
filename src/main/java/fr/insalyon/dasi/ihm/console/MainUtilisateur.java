@@ -6,17 +6,21 @@
 package fr.insalyon.dasi.ihm.console;
 
 import fr.insalyon.dasi.dao.JpaUtil;
+import fr.insalyon.dasi.metier.modele.Cartomancien;
 import fr.insalyon.dasi.metier.modele.Client;
+import fr.insalyon.dasi.metier.modele.Consultation;
+import fr.insalyon.dasi.metier.modele.Employe;
+import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.service.ServiceClient;
+import fr.insalyon.dasi.metier.service.ServiceConsultation;
+import fr.insalyon.dasi.metier.service.ServiceMedium;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
+import java.util.List;
+
 
 /**
  *
@@ -24,18 +28,20 @@ import javax.persistence.Persistence;
  */
 public class MainUtilisateur {
     
+    
+    
      public static void main(String[] args) {
 
        // TODO : Pensez à créer une unité de persistance "DASI-PU" et à vérifier son nom dans la classe JpaUtil
         // Contrôlez l'affichage du log de JpaUtil grâce à la méthode log de la classe JpaUtil
         JpaUtil.init();
-
         initialiserClients();
         //testInscrireClients();
         testAuthentifierClient();
         testDeconnecterClient();
         
         testGenererProfilAstral();
+        testObtenirHistoriqueClient();
         JpaUtil.destroy();
     }
 
@@ -44,6 +50,7 @@ public class MainUtilisateur {
     }
 
     public static void initialiserClients(){
+        
         
         System.out.println();
         System.out.println("**** initialiserClients() ****");
@@ -106,7 +113,8 @@ public class MainUtilisateur {
     }
     
     public static void testInscrireClients(){
-        
+        ServiceClient serviceClient = new ServiceClient();
+   
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
         
         Client ada=null;
@@ -123,7 +131,6 @@ public class MainUtilisateur {
             System.out.println("Erreur: ParseException saisie des dates");
         }
        
-        ServiceClient serv=new ServiceClient();
        
         
         System.out.println();
@@ -132,7 +139,7 @@ public class MainUtilisateur {
         
         
        
-        Long idAda = serv.inscrireClient(ada);
+        Long idAda = serviceClient.inscrireClient(ada);
         if (idAda != null) {
             System.out.println("> Succès inscription");
         } else {
@@ -142,7 +149,7 @@ public class MainUtilisateur {
         afficherClient(ada);
 
         
-        Long idBlaise = serv.inscrireClient(blaise);
+        Long idBlaise = serviceClient.inscrireClient(blaise);
         if (idBlaise != null) {
             System.out.println("> Succès inscription");
         } else {
@@ -151,7 +158,7 @@ public class MainUtilisateur {
         }
         afficherClient(blaise);
 
-        Long idFred = serv.inscrireClient(fred);  //devrait échouer car même adresse mail
+        Long idFred = serviceClient.inscrireClient(fred);  //devrait échouer car même adresse mail
         if (idFred != null) {
             System.out.println("> Succès inscription");
             testPassed=false;
@@ -172,20 +179,22 @@ public class MainUtilisateur {
         
     }
     
-    public static void testAuthentifierClient() {
+    public static  void testAuthentifierClient() {
+        ServiceClient serviceClient = new ServiceClient();
+
         
         System.out.println();
         System.out.println("**** testerAuthentificationClient() ****");
         System.out.println();
         
-        ServiceClient service = new ServiceClient();
+      
         Client client;
         String mail;
         String motDePasse;
         
         mail = "sidiparisi@orange.fr";
         motDePasse = "123sidia";
-        client = service.authentifierClient(mail, motDePasse);
+        client = serviceClient.authentifierClient(mail, motDePasse);
         if (client != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherClient(client);
@@ -195,7 +204,7 @@ public class MainUtilisateur {
 
         mail = "ada.lovelace@insa-lyon.fr";
         motDePasse = "obelix";
-        client = service.authentifierClient(mail, motDePasse);
+        client = serviceClient.authentifierClient(mail, motDePasse);
         if (client != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherClient(client);
@@ -205,7 +214,7 @@ public class MainUtilisateur {
 
         mail = "etudiant.fictif@insa-lyon.fr";
         motDePasse = "********";
-        client = service.authentifierClient(mail, motDePasse);
+        client = serviceClient.authentifierClient(mail, motDePasse);
         if (client != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherClient(client);
@@ -256,5 +265,44 @@ public class MainUtilisateur {
                
         
     }
+     
+     public static void testObtenirHistoriqueClient(){
+        ServiceClient serviceClient = new ServiceClient();
+        ServiceMedium serviceMedium = new ServiceMedium();
+        ServiceConsultation serviceConsultation=new ServiceConsultation();
+        Client client;
+        String mail;
+        String motDePasse;
+        
+        
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
+        mail = "sidiparisi@orange.fr";
+        motDePasse = "123sidia";
+        client = serviceClient.authentifierClient(mail, motDePasse);
+        Medium irma = new Cartomancien("Mme Irma", false, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
+        Employe patrick= new Employe(true,false,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
+        //Ajouter des consultations au client
+        serviceMedium.inscrireMedium(irma);
+        serviceMedium.inscrireEmploye(patrick);
+        Date date=null;
+        try{
+            date=simpleDateFormat.parse("11-01-2020");
+        }catch(ParseException e){
+            
+        }
+        Consultation consultation=new Consultation(date,45,"Super séance!");
+        consultation.setEmploye(patrick);
+        consultation.setMedium(irma);
+        consultation.setClient(client);
+        //serviceConsultation.ajouterConsultation(consultation);
+        
+        
+        
+                
+        List<Consultation> historique=serviceClient.HistoriqueClientTrié(client);
+         for (Consultation c : historique) {
+             System.out.println(c);
+         }
+     }
     
 }

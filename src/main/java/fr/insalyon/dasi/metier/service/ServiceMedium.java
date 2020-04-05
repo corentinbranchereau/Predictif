@@ -23,6 +23,25 @@ public class ServiceMedium {
     protected MediumDao mediumDao = new MediumDao();
     protected EmployeDao employeDao = new EmployeDao();
     
+    public Long inscrireEmploye(Employe employe) {
+        Long resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            JpaUtil.ouvrirTransaction();
+            employeDao.creer(employe);
+            JpaUtil.validerTransaction();
+            resultat = employe.getId();
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service inscrireClient(client)", ex);
+            JpaUtil.annulerTransaction();
+            resultat = null;
+        }
+        finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
     public Employe authentifierEmploye(String mail, String motDePasse) {
         Employe resultat = null;
         JpaUtil.creerContextePersistance();

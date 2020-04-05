@@ -8,6 +8,7 @@ package fr.insalyon.dasi.metier.service;
 import fr.insalyon.dasi.dao.ClientDao;
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Client;
+import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
 
 import java.io.IOException;
@@ -55,7 +56,6 @@ public class ServiceClient {
                     JpaUtil.ouvrirTransaction();
                     resultat=ClientDao.modifierClient(client);
                     JpaUtil.validerTransaction();
-                    
                 }
             }
         } catch (Exception ex) {
@@ -89,12 +89,8 @@ public class ServiceClient {
          JpaUtil.creerContextePersistance();
          AstroTest astroApi = new AstroTest();
          ProfilAstral resultat = null;
-
-        
         List<String> profil = astroApi.getProfil(client.getPrenom(), client.getDateNaissance());
         ProfilAstral profilClient=new ProfilAstral(profil.get(0),profil.get(1),profil.get(2),profil.get(3));
- 
-        
         try {
             JpaUtil.ouvrirTransaction();
             ClientDao.sauvegarderProfilAstral(profilClient);
@@ -105,7 +101,7 @@ public class ServiceClient {
             JpaUtil.annulerTransaction();
             resultat = null;
         }
-        
+     
         if(resultat!=null){
            try {
               JpaUtil.ouvrirTransaction();
@@ -121,9 +117,27 @@ public class ServiceClient {
                JpaUtil.fermerContextePersistance();
            }
         }
-       
-       
         return resultat;
     }
     
+    
+    public List<Consultation> HistoriqueClientTrié(Client client){
+        JpaUtil.creerContextePersistance();
+        List<Consultation> resultat=null;
+        try {
+           JpaUtil.ouvrirTransaction();
+           resultat=ClientDao.obtenirListeConsultation(client);
+           JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service déconnecterClient(client)", ex);
+            JpaUtil.annulerTransaction();
+        }
+        finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;   
+    }
+    
+    
+ 
 }
