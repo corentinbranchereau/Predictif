@@ -19,7 +19,7 @@ public class Cartomancien extends Medium implements Serializable{
         
     }
     
-    public Cartomancien(String denomination, boolean genre, String presentation) {
+    public Cartomancien(String denomination, Genre genre, String presentation) {
         super(denomination,genre,presentation);
     }
     

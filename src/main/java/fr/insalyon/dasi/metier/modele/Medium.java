@@ -25,13 +25,13 @@ public abstract class Medium implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
     protected String denomination;
-    protected boolean genre;
+    protected Genre genre;
     protected String presentation;
     
     protected Medium() {
     }
     
-    public Medium(String denomination, boolean genre, String presentation) {
+    public Medium(String denomination, Genre Genre, String presentation) {
         this.denomination=denomination;
         this.genre=genre;
         this.presentation=presentation;
@@ -49,11 +49,11 @@ public abstract class Medium implements Serializable {
         this.denomination = denomination;
     }
 
-    public boolean isGenre() {
+    public Genre setGenre() {
         return genre;
     }
 
-    public void setGenre(boolean genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 

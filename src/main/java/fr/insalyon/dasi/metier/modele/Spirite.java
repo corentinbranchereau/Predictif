@@ -20,7 +20,7 @@ public class Spirite extends Medium implements Serializable {
     protected Spirite() {
     }
     
-    public Spirite(String denomination, boolean genre, String presentation, String support) {
+    public Spirite(String denomination, Genre genre, String presentation, String support) {
         super(denomination,genre,presentation);
         this.support=support;
     }

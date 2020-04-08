@@ -11,6 +11,7 @@ import fr.insalyon.dasi.metier.modele.Cartomancien;
 import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
+import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.service.ServiceClient;
 import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
@@ -281,9 +282,7 @@ public class MainUtilisateur {
             System.out.println();
             System.out.println("test générerProfilAStral échoué");
             System.out.println();
-        }
-               
-        
+        }   
     }
    
     public static void testAjouterHistoriqueClient(String mail, String motDePasse)
@@ -300,8 +299,8 @@ public class MainUtilisateur {
         
         Client client = (Client) ServiceUtilisateur.authentifierUtilisateur(mail, motDePasse);
         
-        Medium irma = new Cartomancien("Mme Irma", false, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
-        Employe patrick= new Employe(true,false,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
+        Medium irma = new Cartomancien("Mme Irma", Genre.Feminin, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
+        Employe patrick= new Employe(Genre.Masculin,false,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
         serviceMedium.inscrireMedium(irma);
         serviceEmploye.inscrireEmploye(patrick);
         

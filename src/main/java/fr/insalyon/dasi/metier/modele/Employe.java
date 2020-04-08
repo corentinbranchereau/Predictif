@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Employe extends Utilisateur implements Serializable {
     
-    private boolean genre; //true: homme , false: femme
+    private Genre genre; //Masculin, Feminin, Autre
     private boolean enConsultation;
     private Integer tempsTravail;
     
@@ -29,7 +29,7 @@ public class Employe extends Utilisateur implements Serializable {
     protected Employe() {
     }
 
-    public Employe(boolean genre, boolean enConsultation, int tempsTravail, String nom, String prenom, String email, String mdp) {
+    public Employe(Genre genre, boolean enConsultation, int tempsTravail, String nom, String prenom, String email, String mdp) {
         super(nom, prenom, email, mdp);
         this.genre = genre;
         this.enConsultation = enConsultation;
@@ -46,11 +46,11 @@ public class Employe extends Utilisateur implements Serializable {
         }
     }
 
-    public boolean isGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(boolean genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 

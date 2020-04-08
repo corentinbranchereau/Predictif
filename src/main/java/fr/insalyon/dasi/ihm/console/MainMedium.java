@@ -4,6 +4,7 @@ import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Astrologue;
 import fr.insalyon.dasi.metier.modele.Cartomancien;
 import fr.insalyon.dasi.metier.modele.Employe;
+import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.Spirite;
 import fr.insalyon.dasi.metier.service.Service;
@@ -62,14 +63,14 @@ public class MainMedium {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("DASI-PU");
         EntityManager em = emf.createEntityManager();
 
-        Medium gwenaëlle = new Spirite("Gwenaëlle", false, "Spécialiste des grandes conversations au-delà de TOUTES les frontières", "Boule de cristal");
-        Medium tran = new Spirite("Professeur Tran", true, "Votre avenir est devant vous : regardons-le ensemble !", "Marc de café, boule de cristal, oreilles de lapin");
+        Medium gwenaëlle = new Spirite("Gwenaëlle", Genre.Feminin, "Spécialiste des grandes conversations au-delà de TOUTES les frontières", "Boule de cristal");
+        Medium tran = new Spirite("Professeur Tran", Genre.Masculin, "Votre avenir est devant vous : regardons-le ensemble !", "Marc de café, boule de cristal, oreilles de lapin");
         
-        Medium irma = new Cartomancien("Mme Irma", false, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
-        Medium endora = new Cartomancien("Endora", false, "Mes cartes répondront à toutes vos questions personnelles.");
+        Medium irma = new Cartomancien("Mme Irma", Genre.Feminin, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
+        Medium endora = new Cartomancien("Endora", Genre.Feminin, "Mes cartes répondront à toutes vos questions personnelles.");
         
-        Medium serena = new Astrologue("Serena", false, "Basée à Champigny-sur-Marne, Serena vous révèlera votre avenir pour éclairer votre passé", "Ecole Nationale Supérieure d'Astrologie (ENS-Astro)",2006);
-        Medium m = new Astrologue("Mr M", true, "Avenir, avenir, que nous réserves-tu ? N'attendez plus, demandez à me consulter!", "Institut des Nouveaux Savoirs Astrologiques", 2010);
+        Medium serena = new Astrologue("Serena", Genre.Feminin, "Basée à Champigny-sur-Marne, Serena vous révèlera votre avenir pour éclairer votre passé", "Ecole Nationale Supérieure d'Astrologie (ENS-Astro)",2006);
+        Medium m = new Astrologue("Mr M", Genre.Masculin, "Avenir, avenir, que nous réserves-tu ? N'attendez plus, demandez à me consulter!", "Institut des Nouveaux Savoirs Astrologiques", 2010);
         
         System.out.println();
         System.out.println("** Médium avant persistance: ");
