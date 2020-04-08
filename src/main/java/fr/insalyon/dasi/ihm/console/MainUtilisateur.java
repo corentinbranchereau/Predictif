@@ -13,9 +13,11 @@ import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.service.ServiceClient;
+import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
 import fr.insalyon.dasi.metier.service.ServiceConsultation;
 import fr.insalyon.dasi.metier.service.ServiceEmploye;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
+import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,9 +40,9 @@ public class MainUtilisateur {
         // Contrôlez l'affichage du log de JpaUtil grâce à la méthode log de la classe JpaUtil
         JpaUtil.init();
         initialiserClients();
-        //testInscrireClients();
-        //testAuthentifierClient();
-        //testDeconnecterClient();
+        testInscrireClients();
+        testAuthentifierClient();
+        testDeconnecterClient();
         
         testGenererProfilAstral();
         
@@ -62,7 +64,7 @@ public class MainUtilisateur {
         System.out.println("**** initialiserClients() ****");
         System.out.println();
         
-        ServiceClient service=new ServiceClient();
+        ServiceUtilisateur service=new ServiceUtilisateur();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
         
         Client ainoha=null ;
@@ -84,9 +86,9 @@ public class MainUtilisateur {
         afficherClient(michel);
         System.out.println();
         
-        service.inscrireClient(ainoha);
-        service.inscrireClient(sidi);
-        service.inscrireClient(michel);
+        service.inscrireUtilisateur(ainoha);
+        service.inscrireUtilisateur(sidi);
+        service.inscrireUtilisateur(michel);
         
         
             
@@ -119,7 +121,7 @@ public class MainUtilisateur {
     }
     
     public static void testInscrireClients(){
-        ServiceClient serviceClient = new ServiceClient();
+        ServiceUtilisateur ServiceUtilisateur = new ServiceUtilisateur();
    
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
         
@@ -145,7 +147,7 @@ public class MainUtilisateur {
         
         
        
-        Long idAda = serviceClient.inscrireClient(ada);
+        Long idAda = ServiceUtilisateur.inscrireUtilisateur(ada);
         if (idAda != null) {
             System.out.println("> Succès inscription");
         } else {
@@ -155,7 +157,7 @@ public class MainUtilisateur {
         afficherClient(ada);
 
         
-        Long idBlaise = serviceClient.inscrireClient(blaise);
+        Long idBlaise = ServiceUtilisateur.inscrireUtilisateur(blaise);
         if (idBlaise != null) {
             System.out.println("> Succès inscription");
         } else {
@@ -164,7 +166,7 @@ public class MainUtilisateur {
         }
         afficherClient(blaise);
 
-        Long idFred = serviceClient.inscrireClient(fred);  //devrait échouer car même adresse mail
+        Long idFred = ServiceUtilisateur.inscrireUtilisateur(fred);  //devrait échouer car même adresse mail
         if (idFred != null) {
             System.out.println("> Succès inscription");
             testPassed=false;
@@ -186,7 +188,7 @@ public class MainUtilisateur {
     }
     
     public static  void testAuthentifierClient() {
-        ServiceClient serviceClient = new ServiceClient();
+        ServiceUtilisateur ServiceUtilisateur = new ServiceUtilisateur();
 
         
         System.out.println();
@@ -200,7 +202,7 @@ public class MainUtilisateur {
         
         mail = "sidiparisi@orange.fr";
         motDePasse = "123sidia";
-        client = serviceClient.authentifierClient(mail, motDePasse);
+        client = (Client) ServiceUtilisateur.authentifierUtilisateur(mail, motDePasse);
         if (client != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherClient(client);
@@ -210,7 +212,7 @@ public class MainUtilisateur {
 
         mail = "ada.lovelace@insa-lyon.fr";
         motDePasse = "obelix";
-        client = serviceClient.authentifierClient(mail, motDePasse);
+        client = (Client) ServiceUtilisateur.authentifierUtilisateur(mail, motDePasse);
         if (client != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherClient(client);
@@ -220,7 +222,7 @@ public class MainUtilisateur {
 
         mail = "etudiant.fictif@insa-lyon.fr";
         motDePasse = "********";
-        client = serviceClient.authentifierClient(mail, motDePasse);
+        client = (Client) ServiceUtilisateur.authentifierUtilisateur(mail, motDePasse);
         if (client != null) {
             System.out.println("Authentification réussie avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
             afficherClient(client);
@@ -236,11 +238,11 @@ public class MainUtilisateur {
         System.out.println(); 
         
         
-        ServiceClient service=new ServiceClient();
+        ServiceUtilisateur service=new ServiceUtilisateur();
         String mail="michelpouche@yahoo.fr";
         String mdp="polucheisking";
-        Client c=service.authentifierClient(mail,mdp);
-        c=service.deconnecterClient(c);
+        Client c=(Client) service.authentifierUtilisateur(mail,mdp);
+        c=(Client) service.deconnecterUtilisateur(c);
         if(c!=null){
             System.out.println();
             System.out.println("test déconnexion réussie");
@@ -260,13 +262,14 @@ public class MainUtilisateur {
         System.out.println("**** testGenererProfilAstral() ****");
         System.out.println(); 
         
-        ServiceClient service=new ServiceClient();
+        ServiceUtilisateur service=new ServiceUtilisateur();
+        ServiceClient serviceClient=new ServiceClient();
         String mail="michelpouche@yahoo.fr";
         String mdp="polucheisking";
         
-        Client c=service.authentifierClient(mail,mdp);
+        Client c=(Client) service.authentifierUtilisateur(mail,mdp);
         try{
-            service.genererProfilAstral(c);
+            serviceClient.genererProfilAstral(c);
         }catch(IOException e){
             System.err.print("erreur testerProfilAstral");
         }
@@ -290,12 +293,12 @@ public class MainUtilisateur {
         System.out.println("**** testAjouterHistoriqueClient() ****");
         System.out.println();
         
-        ServiceClient serviceClient = new ServiceClient();
+        ServiceUtilisateur ServiceUtilisateur = new ServiceUtilisateur();
         ServiceMedium serviceMedium = new ServiceMedium();
         ServiceEmploye serviceEmploye = new ServiceEmploye();
         ServiceConsultation serviceConsultation=new ServiceConsultation();
         
-        Client client = serviceClient.authentifierClient(mail, motDePasse);
+        Client client = (Client) ServiceUtilisateur.authentifierUtilisateur(mail, motDePasse);
         
         Medium irma = new Cartomancien("Mme Irma", false, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
         Employe patrick= new Employe(true,false,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
@@ -325,9 +328,9 @@ public class MainUtilisateur {
         System.out.println("**** testObtenirHistoriqueClient() ****");
         System.out.println(); 
         
-        ServiceClient serviceClient = new ServiceClient();
+        ServiceUtilisateur ServiceUtilisateur = new ServiceUtilisateur();
         
-        Client client = serviceClient.authentifierClient(mail, motDePasse);
+        Client client = (Client) ServiceUtilisateur.authentifierUtilisateur(mail, motDePasse);
         
         List<Consultation> historique=client.getConsultations();
         

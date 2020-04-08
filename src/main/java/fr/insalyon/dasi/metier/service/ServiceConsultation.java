@@ -32,7 +32,7 @@ public class ServiceConsultation {
             
             
     public Long ajouterConsultation(Consultation consultation){ //permet d'ajouter une consultation dans la bd
-                                                                    //les liste consultations de client et employé sont maj automatiquement par l'entity manager     
+    
         Long resultat = null;
         
         if(consultation.getClient() !=null && consultation.getEmploye() !=null && consultation.getMedium() !=null){      
