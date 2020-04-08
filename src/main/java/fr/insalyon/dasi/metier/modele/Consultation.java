@@ -30,6 +30,7 @@ public class Consultation implements Serializable{
     private Date dateDebut;
     private Integer duree; //minutes
     private String commentaire;
+    private Boolean estTerminée;
     
     @ManyToOne
     private Medium medium;
@@ -42,16 +43,15 @@ public class Consultation implements Serializable{
     @ManyToOne
     private Client client;
     
+    
     public Consultation() {
-    }
-
-    public Consultation(Date dateDebut, Integer duree, String commentaire) {
-        this.dateDebut = dateDebut;
-        this.duree = duree;
-        this.commentaire = commentaire;
+        this.dateDebut = null;
+        this.duree = null;
+        this.commentaire = null;
         this.medium = null;
         this.employe = null;
         this.client=null;
+        this.estTerminée=false;
     }
     
       public Long getId() {
@@ -113,7 +113,16 @@ public class Consultation implements Serializable{
             client.addConsultation(this);
         }
     }
+
+    public Boolean getEstTerminée() {
+        return estTerminée;
+    }
+
+    public void setEstTerminée(Boolean estTerminée) {
+        this.estTerminée = estTerminée;
+    }
    
+    
     @Override
     public String toString() {
         return "Consultation{" + "dateDebut=" + dateDebut + ", duree=" + duree + ", commentaire=" + commentaire + '}';

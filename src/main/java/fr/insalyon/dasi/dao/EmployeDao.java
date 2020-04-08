@@ -44,4 +44,9 @@ public class EmployeDao {
         return em.find(Employe.class, employeId); // renvoie null si l'identifiant n'existe pas
     }
     
+       public List<Employe> listerEmployes() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Employe> query = em.createQuery("SELECT e FROM Employe e ORDER BY e.tempsTravail ASC", Employe.class);
+        return query.getResultList();
+    }
 }
