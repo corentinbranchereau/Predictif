@@ -5,16 +5,17 @@
  */
 package fr.insalyon.dasi.ihm.console;
 
-import fr.insalyon.dasi.dao.ConsultationDao;
 import fr.insalyon.dasi.dao.JpaUtil;
+import static fr.insalyon.dasi.ihm.console.MainMedium.afficherMedium;
+import fr.insalyon.dasi.metier.modele.Astrologue;
 import fr.insalyon.dasi.metier.modele.Cartomancien;
 import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
+import fr.insalyon.dasi.metier.modele.Spirite;
 import fr.insalyon.dasi.metier.service.ServiceClient;
-import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
 import fr.insalyon.dasi.metier.service.ServiceConsultation;
 import fr.insalyon.dasi.metier.service.ServiceEmploye;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
@@ -41,7 +42,10 @@ public class MainUtilisateur {
         // Contrôlez l'affichage du log de JpaUtil grâce à la méthode log de la classe JpaUtil
         JpaUtil.init();
         initialiserClients();
-        testInscrireClients();
+        initialiserMediums();
+        initialiserEmployes();
+        testCreerConsultation();
+        /*testInscrireClients();
         testAuthentifierClient();
         testDeconnecterClient();
         
@@ -49,7 +53,7 @@ public class MainUtilisateur {
         
         testAjouterHistoriqueClient("sidiparisi@orange.fr", "123sidia");
         
-        testObtenirHistoriqueClient("sidiparisi@orange.fr", "123sidia");
+        testObtenirHistoriqueClient("sidiparisi@orange.fr", "123sidia");*/
         
         JpaUtil.destroy();
     }
@@ -77,9 +81,7 @@ public class MainUtilisateur {
              michel = new Client ("Poluche","Michel","michelpouche@yahoo.fr","polucheisking",simpleDateFormat.parse("13-02-1965"),"4 avenue de la place, Avignon","0908650306");
         }catch (ParseException e){
             System.out.println("Erreur: ParseException saisie des dates");
-        }
-            
-            
+        } 
         System.out.println();
         System.out.println("** Clients avant persistance: ");
         afficherClient(ainoha);
@@ -90,27 +92,7 @@ public class MainUtilisateur {
         service.inscrireUtilisateur(ainoha);
         service.inscrireUtilisateur(sidi);
         service.inscrireUtilisateur(michel);
-        
-        
-            
-        /*
-        try {
-            em.getTransaction().begin();
-            em.persist(ada);
-            em.persist(blaise);
-            em.persist(fred);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service", ex);
-            try {
-                em.getTransaction().rollback();
-            }
-            catch (IllegalStateException ex2) {
-                // Ignorer cette exception...
-            }
-        } finally {
-            em.close();
-        }*/
+       
 
         
         System.out.println();
@@ -119,6 +101,101 @@ public class MainUtilisateur {
         afficherClient(sidi);
         afficherClient(michel);
         System.out.println();
+    }
+    
+    public static void initialiserMediums() {
+        
+        ServiceMedium serviceMedium = new ServiceMedium(); 
+        
+        System.out.println();
+        System.out.println("**** initialiserMediums() ****");
+        System.out.println();
+       
+
+        Medium gwenaëlle = new Spirite("Gwenaëlle", Genre.Feminin, "Spécialiste des grandes conversations au-delà de TOUTES les frontières", "Boule de cristal");
+        Medium tran = new Spirite("Professeur Tran", Genre.Masculin, "Votre avenir est devant vous : regardons-le ensemble !", "Marc de café, boule de cristal, oreilles de lapin");
+        
+        Medium irma = new Cartomancien("Mme Irma", Genre.Feminin, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
+        Medium endora = new Cartomancien("Endora", Genre.Feminin, "Mes cartes répondront à toutes vos questions personnelles.");
+        
+        Medium serena = new Astrologue("Serena", Genre.Feminin, "Basée à Champigny-sur-Marne, Serena vous révèlera votre avenir pour éclairer votre passé", "Ecole Nationale Supérieure d'Astrologie (ENS-Astro)",2006);
+        Medium m = new Astrologue("Mr M", Genre.Masculin, "Avenir, avenir, que nous réserves-tu ? N'attendez plus, demandez à me consulter!", "Institut des Nouveaux Savoirs Astrologiques", 2010);
+        
+        System.out.println();
+        System.out.println("** Médium avant persistance: ");
+        
+        afficherMedium(gwenaëlle);
+        afficherMedium(tran);
+        afficherMedium(irma);
+        afficherMedium(endora);
+        afficherMedium(serena);
+        afficherMedium(m);
+        
+        System.out.println();
+
+        serviceMedium.inscrireMedium(gwenaëlle);
+        serviceMedium.inscrireMedium(tran);
+        serviceMedium.inscrireMedium(irma);
+        serviceMedium.inscrireMedium(endora);
+        serviceMedium.inscrireMedium(serena);
+        serviceMedium.inscrireMedium(m);
+
+        System.out.println();
+        System.out.println("** Médiums après persistance: ");
+        afficherMedium(gwenaëlle);
+        afficherMedium(tran);
+        afficherMedium(irma);
+        afficherMedium(endora);
+        afficherMedium(serena);
+        afficherMedium(m);
+        System.out.println();
+    }
+    
+    
+      public static void initialiserEmployes(){
+        
+        
+        System.out.println();
+        System.out.println("**** initialiserEmployes() ****");
+        System.out.println();
+        
+        ServiceUtilisateur service=new ServiceUtilisateur();
+       
+         Employe patrick= new Employe(Genre.Masculin,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
+         Employe martine= new Employe(Genre.Feminin,0,"Geroud","Martine","geroudmartine@gmail.com","petitfilou");
+         Employe jeanne=new Employe(Genre.Feminin,0,"Elbert","Jeanne","elbertjeanne@gmail.com","magnitude43");
+        
+    
+        
+        service.inscrireUtilisateur(patrick);
+        service.inscrireUtilisateur(martine);
+        service.inscrireUtilisateur(jeanne);
+      
+        System.out.println();
+        System.out.println("** Les Employes sont bien inscrit");
+        
+        System.out.println();
+    }
+      
+    public static void testCreerConsultation(){
+        
+        ServiceUtilisateur serviceUtilisateur=new ServiceUtilisateur();
+        ServiceConsultation serviceConsultation=new ServiceConsultation();
+        ServiceMedium serviceMedium=new ServiceMedium();
+        
+        Client client=(Client) serviceUtilisateur.authentifierUtilisateur("sidiparisi@orange.fr","123sidia");
+        Employe employe=(Employe) serviceUtilisateur.authentifierUtilisateur("patrickdolan@gmail.com","lion123");
+  
+        Medium medium=serviceMedium.detailMediumParId(Long.valueOf(1));
+        Consultation consultation=serviceConsultation.demanderConsultation(client, medium);
+        System.out.println("Consultation crée: "+consultation);
+       
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        
+        try{
+            System.out.println("Consultation terminée "+ serviceConsultation.validerConsultation(consultation, simpleDateFormat.parse("09-10-2020"),34,"super seance"));
+        }catch(ParseException e){}
+        
     }
     
     public static void testInscrireClients(){
@@ -300,7 +377,7 @@ public class MainUtilisateur {
         Client client = (Client) ServiceUtilisateur.authentifierUtilisateur(mail, motDePasse);
         
         Medium irma = new Cartomancien("Mme Irma", Genre.Feminin, "Comprenez votre entourage grâce à mes cartes ! Résultats rapides.");
-        Employe patrick= new Employe(Genre.Masculin,false,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
+        Employe patrick= new Employe(Genre.Masculin,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
         serviceMedium.inscrireMedium(irma);
         serviceEmploye.inscrireEmploye(patrick);
         
@@ -312,7 +389,7 @@ public class MainUtilisateur {
             date=simpleDateFormat.parse("11-01-2020");
         }catch(ParseException e){}
         
-        Consultation consultation=new Consultation(date,45,"Super séance!");
+        Consultation consultation=new Consultation();
         consultation.setEmploye(patrick);
         consultation.setClient(client);
         consultation.setMedium(irma);

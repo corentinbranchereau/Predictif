@@ -41,5 +41,10 @@ public class ConsultationDao {
         
         return resultat;
     }
+       
+       public Consultation chercherParId(Long consultationId) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        return em.find(Consultation.class, consultationId); // renvoie null si l'identifiant n'existe pas
+    }
 
 }

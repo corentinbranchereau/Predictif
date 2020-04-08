@@ -81,5 +81,23 @@ public class ServiceUtilisateur {
         return resultat;   
     }
     
+    public Utilisateur obtenirUtilisateurParId(Long id){
+          Utilisateur utilisateur=null;
+          JpaUtil.creerContextePersistance();
+            try {
+                JpaUtil.ouvrirTransaction();
+                utilisateur=utilisateurDao.chercherParId(id);
+                JpaUtil.validerTransaction();
+            } catch (Exception ex) {
+                Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service obtenirUtilisateurParId()", ex);
+                JpaUtil.annulerTransaction();
+                utilisateur = null;
+            }
+            finally {
+                JpaUtil.fermerContextePersistance();
+            }      
+         return utilisateur;
+      }
+    
    
 }

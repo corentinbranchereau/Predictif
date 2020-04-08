@@ -18,7 +18,6 @@ import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Medium;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,14 +37,16 @@ public class ServiceConsultation {
             
             
     public Long ajouterConsultation(Consultation consultation){ //permet d'ajouter une consultation dans la bd
-    
+        
+        
         Long resultat = null;
         if(consultation!=null){
             if(consultation.getClient() !=null && consultation.getEmploye() !=null && consultation.getMedium() !=null){      
                 JpaUtil.creerContextePersistance();
                 try {
                     JpaUtil.ouvrirTransaction();
-                    consultationDao.creer(consultation);
+                    
+                    consultationDao.creer(consultation);   
                     clientDao.modifier(consultation.getClient());
                     employeDao.modifier(consultation.getEmploye());
                     JpaUtil.validerTransaction();
@@ -91,10 +92,12 @@ public class ServiceConsultation {
             }
             
             if(employeLibre!=null){
+                employeLibre.setEstDisponible(false);
                 consultation=new Consultation();
                 consultation.setEmploye(employeLibre);
                 consultation.setClient(client);
                 consultation.setMedium(medium);
+                
                 Long id=ajouterConsultation(consultation);
                 if(id==null){
                  consultation=null; 
@@ -102,34 +105,61 @@ public class ServiceConsultation {
             }else{
                 System.out.println("Pas d'employé de disponible pour la consultation");
             }
-            
+           
          return consultation;    
       }
       
-      public Consultation validerConsultation(Consultation consultation,Date dateDebut,Integer duree, String commentaire){
+      public Consultation validerConsultation(Consultation consultation,Date dateDebut,Integer duree, String commentaire){ //revoie true si validation a fonctionne, false sinon
           
-          Consultation resultat=null;
+          boolean validee=false;
           if(   consultation.getEmploye()!=null && consultation.getMedium()!=null 
              && consultation.getClient()!=null && dateDebut!=null && duree!=null){
               
                 consultation.setDateDebut(dateDebut);
                 consultation.setDuree(duree);
                 consultation.setCommentaire(commentaire);
-                 JpaUtil.creerContextePersistance();
+                consultation.setEstTerminée(true);
+                Employe employe=consultation.getEmploye();
+                employe.addTempsTravail(duree);
+                employe.setEstDisponible(true);
+                
+                JpaUtil.creerContextePersistance();
                 try {
                     JpaUtil.ouvrirTransaction();
-                    resultat=consultationDao.modifier(consultation);
+                    consultationDao.modifier(consultation);   
+                    clientDao.modifier(consultation.getClient());
+                    employeDao.modifier(consultation.getEmploye());
                     JpaUtil.validerTransaction();
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                     JpaUtil.annulerTransaction();
-                    resultat=null;
+                    validee = false;
+                    consultation=null;
                 }
                 finally {
                     JpaUtil.fermerContextePersistance();
                 }      
+              
                 
-          }
-         return resultat;
+            }
+         return consultation;
+      }
+      
+      public Consultation obtenirConsultationParId(Long id){
+          Consultation consultation=null;
+          JpaUtil.creerContextePersistance();
+            try {
+                JpaUtil.ouvrirTransaction();
+                consultation=consultationDao.chercherParId(id);
+                JpaUtil.validerTransaction();
+            } catch (Exception ex) {
+                Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
+                JpaUtil.annulerTransaction();
+                consultation = null;
+            }
+            finally {
+                JpaUtil.fermerContextePersistance();
+            }      
+         return consultation;
       }
 }

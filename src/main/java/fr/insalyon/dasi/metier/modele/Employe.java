@@ -69,6 +69,10 @@ public class Employe extends Utilisateur implements Serializable {
     public void setTempsTravail(int tempsTravail) {
         this.tempsTravail = tempsTravail;
     }
+    
+    public void addTempsTravail(int tempsTravail) {
+        this.tempsTravail += tempsTravail;
+    }
 
     public List<Consultation> getConsultations() {
         return consultations;
