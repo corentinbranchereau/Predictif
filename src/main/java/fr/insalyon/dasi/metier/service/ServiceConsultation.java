@@ -114,6 +114,7 @@ public class ServiceConsultation {
               
                 consultation.setDateDebut(dateDebut);
                 consultation.setDuree(duree);
+                consultation.setCommentaire(commentaire);
                  JpaUtil.creerContextePersistance();
                 try {
                     JpaUtil.ouvrirTransaction();
