@@ -7,6 +7,8 @@ package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,13 +27,14 @@ public abstract class Medium implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
     protected String denomination;
+    @Enumerated(EnumType.STRING)
     protected Genre genre;
     protected String presentation;
     
     protected Medium() {
     }
     
-    public Medium(String denomination, Genre Genre, String presentation) {
+    public Medium(String denomination, Genre genre, String presentation) {
         this.denomination=denomination;
         this.genre=genre;
         this.presentation=presentation;

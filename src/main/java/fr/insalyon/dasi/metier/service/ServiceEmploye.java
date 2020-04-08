@@ -103,5 +103,4 @@ public class ServiceEmploye {
         Collections.reverse(resultat); //les plus récentes d'abord
         return resultat;   
     }
-    
 }

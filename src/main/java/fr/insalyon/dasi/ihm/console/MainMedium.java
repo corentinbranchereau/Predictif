@@ -3,16 +3,26 @@ package fr.insalyon.dasi.ihm.console;
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Astrologue;
 import fr.insalyon.dasi.metier.modele.Cartomancien;
+import fr.insalyon.dasi.metier.modele.Client;
+import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.Spirite;
 import fr.insalyon.dasi.metier.service.Service;
+import fr.insalyon.dasi.metier.service.ServiceClient;
+import fr.insalyon.dasi.metier.service.ServiceConsultation;
 import fr.insalyon.dasi.metier.service.ServiceEmploye;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
+import fr.insalyon.dasi.metier.service.ServiceStatistiques;
+import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -29,17 +39,20 @@ public class MainMedium {
         // Contrôlez l'affichage du log de JpaUtil grâce à la méthode log de la classe JpaUtil
         JpaUtil.init();
 
-        initialiserMediums();            // Question 3
+        //initialiserMediums();            // Question 3
        
-        testerListeMedium();
-        testerListeMediumTriée();
-        testerRechercheMedium();
+        //testerListeMedium();
+        //testerListeMediumTriée();
+        //testerRechercheMedium();
         //testerInscriptionClient();       // Question 4 & 5
         //testerRechercheClient();         // Question 6
         //testerListeClients();            // Question 7
         //testerAuthentificationClient();  // Question 8
         //saisirInscriptionClient();       // Question 9
         //saisirRechercheClient();
+        
+        //testStatistiquesMediumConsultes();
+        testStatistiquesClientsParEmploye();
 
         JpaUtil.destroy();
     }
@@ -221,5 +234,141 @@ public class MainMedium {
         } else {
             System.out.println("Authentification échouée avec le mail '" + mail + "' et le mot de passe '" + motDePasse + "'");
         }
+    }
+    
+     public static void testStatistiquesMediumConsultes() {
+        
+        System.out.println();
+        System.out.println("**** testStatistiquesMediumConsultes() ****");
+        System.out.println(); 
+        
+        
+        initialiserMediums();
+        
+        ServiceUtilisateur service=new ServiceUtilisateur();
+        ServiceEmploye serviceEmploye = new ServiceEmploye();
+        ServiceConsultation serviceConsultation  = new ServiceConsultation();
+        ServiceMedium serviceMedium  = new ServiceMedium();
+        ServiceClient serviceClient = new ServiceClient();
+        ServiceStatistiques serviceStats = new ServiceStatistiques();
+        
+        Employe patrick= new Employe(Genre.Masculin,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
+        patrick.setEstDisponible(true);
+        serviceEmploye.inscrireEmploye(patrick);
+        
+        Employe valerie= new Employe(Genre.Feminin,0,"Franoux","Valerie","fraval@gmail.com","rude670");
+        valerie.setEstDisponible(true);
+        serviceEmploye.inscrireEmploye(valerie);
+      
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
+        
+        Client michel=null;
+        Client sidi = null;
+        try{  
+            michel = new Client ("Poluche","Michel","michelpouche@yahoo.fr","polucheisking",simpleDateFormat.parse("13-02-1965"),"4 avenue de la place, Avignon","0908650306");
+            sidi = new Client ("Parisi","Sidi","sidiparisi@orange.fr","123sidia",simpleDateFormat.parse("23-05-1999"),"4 avenue des grandes Herbes, Saint Michel","0102040306");
+        }catch (ParseException e){
+            System.out.println("Erreur: ParseException saisie des dates");
+        }
+
+        serviceClient.inscrireClient(michel);
+        serviceClient.inscrireClient(sidi);
+        
+        Medium medium1 = serviceMedium.detailMediumParId(new Long(1));
+        Medium medium2 = serviceMedium.detailMediumParId(new Long(2));
+        
+        Consultation consult1 = serviceConsultation.demanderConsultation(michel, medium1);
+        
+        if(consult1==null)
+        {
+            System.out.println("Erreur : Pas d'employé disponible pour la consultation 1");
+            return;
+        }
+        
+        Consultation consult2 = serviceConsultation.demanderConsultation(sidi, medium1);
+                
+        if(consult2==null)
+        {
+            System.out.println("Erreur : Pas d'employé disponible pour la consultation 2");
+            return;
+        }
+        
+        serviceConsultation.validerConsultation(consult1, new Date(System.currentTimeMillis()), new Integer(20), "pas mal!");
+        
+        List<Pair<Medium,Long>> stats = serviceStats.ListeMediumConsultes();
+        
+        for(Pair<Medium,Long> ligne : stats)
+        {
+            System.out.println("Medium : "+ligne.getKey()+" - "+ligne.getValue());
+        }
+        
+    }
+     
+      public static void testStatistiquesClientsParEmploye() {
+        
+        System.out.println();
+        System.out.println("**** testStatistiquesClientsParEmploye() ****");
+        System.out.println(); 
+        
+        
+        initialiserMediums();
+        
+        ServiceUtilisateur service=new ServiceUtilisateur();
+        ServiceEmploye serviceEmploye = new ServiceEmploye();
+        ServiceConsultation serviceConsultation  = new ServiceConsultation();
+        ServiceMedium serviceMedium  = new ServiceMedium();
+        ServiceClient serviceClient = new ServiceClient();
+        ServiceStatistiques serviceStats = new ServiceStatistiques();
+        
+        Employe patrick= new Employe(Genre.Masculin,0,"Dolan","Patrick","patrickdolan@gmail.com","lion123");
+        patrick.setEstDisponible(true);
+        serviceEmploye.inscrireEmploye(patrick);
+        
+        Employe valerie= new Employe(Genre.Feminin,0,"Franoux","Valerie","fraval@gmail.com","rude670");
+        valerie.setEstDisponible(true);
+        serviceEmploye.inscrireEmploye(valerie);
+      
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
+        
+        Client michel=null;
+        Client sidi = null;
+        try{  
+            michel = new Client ("Poluche","Michel","michelpouche@yahoo.fr","polucheisking",simpleDateFormat.parse("13-02-1965"),"4 avenue de la place, Avignon","0908650306");
+            sidi = new Client ("Parisi","Sidi","sidiparisi@orange.fr","123sidia",simpleDateFormat.parse("23-05-1999"),"4 avenue des grandes Herbes, Saint Michel","0102040306");
+        }catch (ParseException e){
+            System.out.println("Erreur: ParseException saisie des dates");
+        }
+
+        serviceClient.inscrireClient(michel);
+        serviceClient.inscrireClient(sidi);
+        
+        Medium medium1 = serviceMedium.detailMediumParId(new Long(1));
+        Medium medium2 = serviceMedium.detailMediumParId(new Long(2));
+        
+        Consultation consult1 = serviceConsultation.demanderConsultation(michel, medium1);
+        
+        if(consult1==null)
+        {
+            System.out.println("Erreur : Pas d'employé disponible pour la consultation 1");
+            return;
+        }
+        
+        Consultation consult2 = serviceConsultation.demanderConsultation(sidi, medium2);
+                
+        if(consult2==null)
+        {
+            System.out.println("Erreur : Pas d'employé disponible pour la consultation 2");
+            return;
+        }
+        
+        serviceConsultation.validerConsultation(consult1, new Date(System.currentTimeMillis()), new Integer(20), "pas mal!");
+        
+        List<Pair<Employe,Long>> stats = serviceStats.ListeNombreClientParEmploye();
+        
+        for(Pair<Employe,Long> ligne : stats)
+        {
+            System.out.println("Employe : "+ligne.getKey()+" - "+ligne.getValue());
+        }
+        
     }
 }
