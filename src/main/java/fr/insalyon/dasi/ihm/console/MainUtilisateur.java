@@ -122,7 +122,7 @@ public class MainUtilisateur {
         Medium m = new Astrologue("Mr M", Genre.Masculin, "Avenir, avenir, que nous réserves-tu ? N'attendez plus, demandez à me consulter!", "Institut des Nouveaux Savoirs Astrologiques", 2010);
         
         System.out.println();
-        System.out.println("** Médium avant persistance: ");
+       /* System.out.println("** Médium avant persistance: ");
         
         afficherMedium(gwenaëlle);
         afficherMedium(tran);
@@ -131,7 +131,7 @@ public class MainUtilisateur {
         afficherMedium(serena);
         afficherMedium(m);
         
-        System.out.println();
+        System.out.println();*/
 
         serviceMedium.inscrireMedium(gwenaëlle);
         serviceMedium.inscrireMedium(tran);
@@ -140,7 +140,7 @@ public class MainUtilisateur {
         serviceMedium.inscrireMedium(serena);
         serviceMedium.inscrireMedium(m);
 
-        System.out.println();
+       /* System.out.println();
         System.out.println("** Médiums après persistance: ");
         afficherMedium(gwenaëlle);
         afficherMedium(tran);
@@ -148,7 +148,7 @@ public class MainUtilisateur {
         afficherMedium(endora);
         afficherMedium(serena);
         afficherMedium(m);
-        System.out.println();
+        System.out.println();*/
     }
     
     
@@ -184,18 +184,19 @@ public class MainUtilisateur {
         ServiceMedium serviceMedium=new ServiceMedium();
         
         Client client=(Client) serviceUtilisateur.authentifierUtilisateur("sidiparisi@orange.fr","123sidia");
-        Employe employe=(Employe) serviceUtilisateur.authentifierUtilisateur("patrickdolan@gmail.com","lion123");
+        //Employe employe=(Employe) serviceUtilisateur.authentifierUtilisateur("patrickdolan@gmail.com","lion123");
   
         Medium medium=serviceMedium.detailMediumParId(Long.valueOf(1));
         Consultation consultation=serviceConsultation.demanderConsultation(client, medium);
+        //Employe employe2=(Employe) serviceUtilisateur.authentifierUtilisateur("patrickdolan@gmail.com","lion123");
         System.out.println("Consultation crée: "+consultation);
-       
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        System.out.println("Employe dispo: "+consultation.getEmploye().isEstDisponible());
+        /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         
         try{
             System.out.println("Consultation terminée "+ serviceConsultation.validerConsultation(consultation, simpleDateFormat.parse("09-10-2020"),34,"super seance"));
         }catch(ParseException e){}
-        
+        System.out.println("Employe dispo: "+employe2.isEstDisponible());*/
     }
     
     public static void testInscrireClients(){

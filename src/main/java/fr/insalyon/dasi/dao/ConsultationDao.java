@@ -5,15 +5,16 @@
  */
 package fr.insalyon.dasi.dao;
 
-import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Medium;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
 
 /**
  *

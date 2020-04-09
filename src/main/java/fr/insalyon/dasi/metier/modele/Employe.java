@@ -86,6 +86,6 @@ public class Employe extends Utilisateur implements Serializable {
     
     @Override
     public String toString() {
-        return super.toString() + "type=Employe, genre=" + genre + ", enLigne=" + estDisponible + "tempsTravail=" + tempsTravail;
+        return super.toString() + "type=Employe, genre=" + genre + ", estDisponible=" + estDisponible + "tempsTravail=" + tempsTravail;
     }
 }

@@ -38,7 +38,7 @@ public class ServiceConsultation {
             
     public Long ajouterConsultation(Consultation consultation){ //permet d'ajouter une consultation dans la bd
         
-        
+         
         Long resultat = null;
         if(consultation!=null){
             if(consultation.getClient() !=null && consultation.getEmploye() !=null && consultation.getMedium() !=null){      
@@ -46,11 +46,17 @@ public class ServiceConsultation {
                 try {
                     JpaUtil.ouvrirTransaction();
                     
-                    consultationDao.creer(consultation);   
-                    clientDao.modifier(consultation.getClient());
+                   // consultationDao.creer(consultation);
+                    Client c=clientDao.modifier(consultation.getClient());
                     employeDao.modifier(consultation.getEmploye());
+                    /*Employe e=employeDao.chercherParId(consultation.getEmploye().getId());
+                    e.setEstDisponible(false);
+                    employeDao.modifier(e);*/
+                    
+                    
                     JpaUtil.validerTransaction();
-                    resultat = consultation.getId();
+                    List<Consultation> list=c.getConsultations();
+                    resultat = list.get(list.size()-1).getId();
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                     JpaUtil.annulerTransaction();
@@ -94,11 +100,11 @@ public class ServiceConsultation {
             if(employeLibre!=null){
                 employeLibre.setEstDisponible(false);
                 consultation=new Consultation();
-                consultation.setEmploye(employeLibre);
                 consultation.setClient(client);
                 consultation.setMedium(medium);
-                
-                Long id=ajouterConsultation(consultation);
+                consultation.setEmploye(employeLibre);
+             
+               Long id=ajouterConsultation(consultation);
                 if(id==null){
                  consultation=null; 
                 }
@@ -111,14 +117,14 @@ public class ServiceConsultation {
       
       public Consultation validerConsultation(Consultation consultation,Date dateDebut,Integer duree, String commentaire){ //revoie true si validation a fonctionne, false sinon
           
-          boolean validee=false;
+         
           if(   consultation.getEmploye()!=null && consultation.getMedium()!=null 
              && consultation.getClient()!=null && dateDebut!=null && duree!=null){
               
                 consultation.setDateDebut(dateDebut);
                 consultation.setDuree(duree);
                 consultation.setCommentaire(commentaire);
-                consultation.setEstTerminée(true);
+                consultation.setEstTerminee(true);
                 Employe employe=consultation.getEmploye();
                 employe.addTempsTravail(duree);
                 employe.setEstDisponible(true);
@@ -133,7 +139,7 @@ public class ServiceConsultation {
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                     JpaUtil.annulerTransaction();
-                    validee = false;
+                    
                     consultation=null;
                 }
                 finally {
