@@ -184,19 +184,27 @@ public class MainUtilisateur {
         ServiceMedium serviceMedium=new ServiceMedium();
         
         Client client=(Client) serviceUtilisateur.authentifierUtilisateur("sidiparisi@orange.fr","123sidia");
-        //Employe employe=(Employe) serviceUtilisateur.authentifierUtilisateur("patrickdolan@gmail.com","lion123");
+         Client clientBis=(Client) serviceUtilisateur.authentifierUtilisateur("ainoha.sing@free.fr","abahisgod123");
   
         Medium medium=serviceMedium.detailMediumParId(Long.valueOf(1));
         Consultation consultation=serviceConsultation.demanderConsultation(client, medium);
-        //Employe employe2=(Employe) serviceUtilisateur.authentifierUtilisateur("patrickdolan@gmail.com","lion123");
         System.out.println("Consultation crée: "+consultation);
-        System.out.println("Employe dispo: "+consultation.getEmploye().isEstDisponible());
-        /*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Consultation consultationBis=serviceConsultation.demanderConsultation(clientBis, medium);
+        System.out.println("Consultation Bis crée avec un employé différent: "+consultationBis);
         
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try{
-            System.out.println("Consultation terminée "+ serviceConsultation.validerConsultation(consultation, simpleDateFormat.parse("09-10-2020"),34,"super seance"));
+            System.out.println(" 1ère Consultation terminée "+ serviceConsultation.validerConsultation(consultation, simpleDateFormat.parse("09-10-2020"),34,"super seance"));
         }catch(ParseException e){}
-        System.out.println("Employe dispo: "+employe2.isEstDisponible());*/
+        try{
+            System.out.println(" 2ème Consultation terminée "+ serviceConsultation.validerConsultation(consultationBis, simpleDateFormat.parse("09-11-2020"),15,"client ennuyant"));
+        }catch(ParseException e){}
+        
+        Consultation consultationTierce=serviceConsultation.demanderConsultation(client, medium);
+         System.out.println("Consultation crée avec l'employé ayant le moins d'heure: "+consultationTierce);
+         try{
+            System.out.println(" derniere Consultation terminée "+ serviceConsultation.validerConsultation(consultationTierce, simpleDateFormat.parse("08-10-2020"),22,"ok"));
+        }catch(ParseException e){}
     }
     
     public static void testInscrireClients(){

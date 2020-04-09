@@ -36,27 +36,21 @@ public class ServiceConsultation {
     ConsultationDao consultationDao=new ConsultationDao();
             
             
-    public Long ajouterConsultation(Consultation consultation){ //permet d'ajouter une consultation dans la bd
+    public Consultation ajouterConsultation(Consultation consultation){ //permet d'ajouter une consultation dans la bd
         
          
-        Long resultat = null;
+        Consultation resultat = null;
         if(consultation!=null){
             if(consultation.getClient() !=null && consultation.getEmploye() !=null && consultation.getMedium() !=null){      
                 JpaUtil.creerContextePersistance();
                 try {
-                    JpaUtil.ouvrirTransaction();
-                    
-                   // consultationDao.creer(consultation);
+                    JpaUtil.ouvrirTransaction();     
                     Client c=clientDao.modifier(consultation.getClient());
                     employeDao.modifier(consultation.getEmploye());
-                    /*Employe e=employeDao.chercherParId(consultation.getEmploye().getId());
-                    e.setEstDisponible(false);
-                    employeDao.modifier(e);*/
-                    
-                    
                     JpaUtil.validerTransaction();
+                    
                     List<Consultation> list=c.getConsultations();
-                    resultat = list.get(list.size()-1).getId();
+                    resultat = list.get(list.size()-1);
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                     JpaUtil.annulerTransaction();
@@ -104,10 +98,8 @@ public class ServiceConsultation {
                 consultation.setMedium(medium);
                 consultation.setEmploye(employeLibre);
              
-               Long id=ajouterConsultation(consultation);
-                if(id==null){
-                 consultation=null; 
-                }
+               consultation=ajouterConsultation(consultation);
+                
             }else{
                 System.out.println("Pas d'employé de disponible pour la consultation");
             }
