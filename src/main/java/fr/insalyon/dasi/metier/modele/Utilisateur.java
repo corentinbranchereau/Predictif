@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,23 +27,35 @@ public abstract class Utilisateur implements Serializable {
     @Column(unique = true)
     protected String email;
     protected String mdp;
+    private String telephone;
     protected boolean estConnecte;
+    @Enumerated(EnumType.STRING)
+    private Genre genre; //Masculin, Feminin, Autre
 
     protected Utilisateur() {
     }
 
 
-     public Utilisateur(String nom, String prenom, String email, String mdp) {
-        
+     public Utilisateur(String nom, String prenom, String email, String mdp, Genre genre, String telephone) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.mdp = mdp;
         this.estConnecte=false;
+        this.genre=genre;
+        this.telephone=telephone;
     }
     
     public Long getId() {
         return id;
+    }
+    
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
     public String getNom() {
@@ -89,10 +98,17 @@ public abstract class Utilisateur implements Serializable {
         this.estConnecte = estConnecte;
     }
     
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
 
     @Override
     public String toString() {
-        return "Utilisateur : id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", mdp=" + mdp;
+        return "Utilisateur : id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", genre=" + genre + ", email=" + email + ", telephone=" + telephone + ", mdp=" + mdp;
     }
 
 }

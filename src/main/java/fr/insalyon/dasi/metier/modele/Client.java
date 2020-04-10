@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 
 /**
  *
- * @author DASI Team
+ * @author thibautgravey
  */
 @Entity
 public class Client extends Utilisateur implements Serializable {
@@ -21,7 +21,6 @@ public class Client extends Utilisateur implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateNaissance;
     private String adresse_postale;
-    private String telephone;
     
     @OneToOne
     private ProfilAstral profilAstral;
@@ -32,11 +31,10 @@ public class Client extends Utilisateur implements Serializable {
     protected Client() {
     }
     
-     public Client(String nom, String prenom, String email, String mdp, Date dateNaissance, String adresse_postale, String telephone) {
-        super(nom, prenom, email, mdp);
+     public Client(String nom, String prenom, Genre genre, String email, String mdp, Date dateNaissance, String adresse_postale, String telephone) {
+        super(nom, prenom, email, mdp, genre, telephone);
         this.dateNaissance = dateNaissance;
         this.adresse_postale = adresse_postale;
-        this.telephone = telephone;
         this.profilAstral=null;
         this.consultations=new ArrayList<>();
     }
@@ -83,16 +81,8 @@ public class Client extends Utilisateur implements Serializable {
         this.adresse_postale = adresse_postale;
     }
 
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
     @Override
     public String toString() {
-        return super.toString() + ", type=Client, dateNaissance=" + dateNaissance + ", adresse_postale=" + adresse_postale + ", telephone=" + telephone + ", " + profilAstral;
+        return super.toString() + ", type=Client, dateNaissance=" + dateNaissance + ", adresse_postale=" + adresse_postale + ", " + profilAstral;
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
@@ -52,7 +47,7 @@ public abstract class Medium implements Serializable {
         this.denomination = denomination;
     }
 
-    public Genre setGenre() {
+    public Genre getGenre() {
         return genre;
     }
 

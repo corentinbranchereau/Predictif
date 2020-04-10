@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
@@ -20,8 +15,6 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Employe extends Utilisateur implements Serializable {
-    @Enumerated(EnumType.STRING)
-    private Genre genre; //Masculin, Feminin, Autre
     private boolean estDisponible;
     private Integer tempsTravail;
     
@@ -31,9 +24,8 @@ public class Employe extends Utilisateur implements Serializable {
     protected Employe() {
     }
 
-    public Employe(Genre genre, int tempsTravail, String nom, String prenom, String email, String mdp) {
-        super(nom, prenom, email, mdp);
-        this.genre = genre;
+    public Employe(Genre genre, int tempsTravail, String nom, String prenom, String email, String mdp, String telephone) {
+        super(nom, prenom, email, mdp, genre, telephone);
         this.estDisponible = true;
         this.tempsTravail = tempsTravail;
         this.consultations = new ArrayList();
@@ -46,14 +38,6 @@ public class Employe extends Utilisateur implements Serializable {
         {
             consultation.setEmploye(this);
         }
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
     }
 
     public boolean isEstDisponible() {
@@ -86,6 +70,6 @@ public class Employe extends Utilisateur implements Serializable {
     
     @Override
     public String toString() {
-        return super.toString() + "type=Employe, genre=" + genre + ", estDisponible=" + estDisponible + "tempsTravail=" + tempsTravail;
+        return super.toString() + "type=Employe, estDisponible=" + estDisponible + "tempsTravail=" + tempsTravail;
     }
 }

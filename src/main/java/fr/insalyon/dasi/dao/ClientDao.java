@@ -1,17 +1,14 @@
-
 package fr.insalyon.dasi.dao;
 
 import fr.insalyon.dasi.metier.modele.Client;
-import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  *
- * @author DASI Team
+ * @author thibautgravey
  */
 public class ClientDao{
     
