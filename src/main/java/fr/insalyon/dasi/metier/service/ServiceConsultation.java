@@ -66,6 +66,9 @@ public class ServiceConsultation {
     
       public Consultation demanderConsultation(Client client, Medium medium){ //renvoie la consultation crée avec l'employé assigné 
                                                                               // si pas d'employé trouvé,  renvoie null;
+          // Atention: si on appelle plusieurs fois cette méthode avec le même client, penser à mettre à jour le client à chaque fois, 
+          // avec la valeur de consultation de retour: client=consultation.getClient();
+          
           Consultation consultation=null;
           List<Employe> listeEmployes=null;
           JpaUtil.creerContextePersistance();
@@ -110,7 +113,7 @@ public class ServiceConsultation {
       public Consultation validerConsultation(Consultation consultation,Date dateDebut,Integer duree, String commentaire){ //revoie true si validation a fonctionne, false sinon
           
          
-          if(   consultation.getEmploye()!=null && consultation.getMedium()!=null 
+          if( consultation!=null && consultation.getEmploye()!=null && consultation.getMedium()!=null 
              && consultation.getClient()!=null && dateDebut!=null && duree!=null){
               
                 consultation.setDateDebut(dateDebut);
@@ -124,9 +127,12 @@ public class ServiceConsultation {
                 JpaUtil.creerContextePersistance();
                 try {
                     JpaUtil.ouvrirTransaction();
-                    consultationDao.modifier(consultation);   
-                    clientDao.modifier(consultation.getClient());
+                    //consultation=consultationDao.modifier(consultation);   
+                    Client c=clientDao.modifier(consultation.getClient());
                     employeDao.modifier(consultation.getEmploye());
+                    List<Consultation> listeConsultation=c.getConsultations();
+                    consultation=listeConsultation.get(listeConsultation.size()-1);
+                    
                     JpaUtil.validerTransaction();
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
