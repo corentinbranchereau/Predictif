@@ -358,26 +358,22 @@ public class Service {
                 notificationWriter.println("Bonjour "+cl.getPrenom()+". J'ai bien reçu"
                         + " votre demande de consultation "+ calendarStyle.format(consultation.getDateDebut())+"."
                         + " Vous pouvez dès à présent me contacter au "+e.getTelephone()+". A tout de suite !"
-                        + "Médiumiquement votre, "+m.getDenomination());
+                        + " Médiumiquement votre, "+m.getDenomination());
 
                 Message.envoyerNotification(
                         cl.getTelephone(),
                         message.toString()
                 );
-            
-            System.out.println("service consultation: 1"+consultation);
+                      
             } catch (Exception ex) {
                 Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                 JpaUtil.annulerTransaction();
 
-                consultation=null;
-                System.out.println("service consultation: 2"+consultation);
+                consultation=null;               
             }
             finally {
-                JpaUtil.fermerContextePersistance();
-                System.out.println("service consultation: 3"+consultation);
+                JpaUtil.fermerContextePersistance();             
             }    
-             System.out.println("service consultation: 4"+consultation);
             return consultation;
     }
       

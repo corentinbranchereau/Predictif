@@ -212,7 +212,7 @@ public class Main {
          
          
          Consultation consultation4=service.demanderConsultation(client4, medium);
-            System.out.println("Consultation 4 refusée : "+ consultation4);
+            System.out.println("Consultation 4 refusée car pas d'employé dispo: "+ consultation4);
             System.out.println();
  
         // COMMENCEMENT DES CONSULTATIONS //
@@ -230,13 +230,13 @@ public class Main {
         
         consultation=service.validerConsultation(consultation,"super séance");
         consultation2=service.validerConsultation(consultation2,"un client charmant");
-        consultation3=service.validerConsultation(consultation3,"un moment très agréable");
+        //consultation3=service.validerConsultation(consultation3,"un moment très agréable");
         
         System.out.println("validation de consultation 1:"+consultation);
         System.out.println();
         System.out.println("validation de consultation 2:"+consultation2);
         System.out.println();
-        System.out.println("validation de consultation 3:"+consultation3);
+        System.out.println("consultation 3 non terminée, Employé toujours pas dispo:"+consultation3.getEmploye());
         System.out.println();
         
         
