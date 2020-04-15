@@ -358,7 +358,7 @@ public class Service {
                 notificationWriter.println("Bonjour "+cl.getPrenom()+". J'ai bien reçu"
                         + " votre demande de consultation "+ calendarStyle.format(consultation.getDateDebut())+"."
                         + " Vous pouvez dès à présent me contacter au "+e.getTelephone()+". A tout de suite !"
-                        + " Médiumiquement votre, "+m.getDenomination());
+                        + " Médiumiquement votre, "+m.getDenomination()+".");
 
                 Message.envoyerNotification(
                         cl.getTelephone(),
