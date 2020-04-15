@@ -28,16 +28,41 @@ public class Main {
         // Contrôlez l'affichage du log de JpaUtil grâce à la méthode log de la classe JpaUtil
         JpaUtil.init();
         
+        /* Toujours initialiser */
         initialiserClients();
         initialiserMediums();
         initialiserEmployes();
-        testCreerConsultation();
+        
+        /* 1 A LA FOIS */
+        //testCreerConsultation();
+        //testInscrireClients();
+        //testAuthentifierClient();
+        //testGenererProfilAstral();
+        
+        //testAjouterHistoriqueClient("ainoha.sing@free.fr","abahisgod123");
+        //testObtenirHistoriqueClient("ainoha.sing@free.fr","abahisgod123");
+        
+        //testerRechercheMedium();
+        //testerListeMedium();
+        //testerListeMediumTriée();
+        //testerAuthentificationEmploye();
+        //testStatistiquesMediumConsultes();
+        //testStatistiquesClientsParEmploye();
   
         JpaUtil.destroy();
+        
     }
 
    public static void afficherClient(Client client) {
         System.out.println("-> " + client);
+    }
+   
+   public static void afficherMedium(Medium medium) {
+        System.out.println("-> " + medium);
+    }
+    
+    public static void afficherEmploye(Employe employe) {
+        System.out.println("-> " + employe);
     }
 
     public static void initialiserClients(){
@@ -99,7 +124,7 @@ public class Main {
         Medium m = new Astrologue("Mr M", Genre.Masculin, "Avenir, avenir, que nous réserves-tu ? N'attendez plus, demandez à me consulter!", "Institut des Nouveaux Savoirs Astrologiques", 2010);
         
         System.out.println();
-       /* System.out.println("** Médium avant persistance: ");
+        System.out.println("** Médium avant persistance: ");
         
         afficherMedium(gwenaëlle);
         afficherMedium(tran);
@@ -108,7 +133,7 @@ public class Main {
         afficherMedium(serena);
         afficherMedium(m);
         
-        System.out.println();*/
+        System.out.println();
 
         service.inscrireMedium(gwenaëlle);
         service.inscrireMedium(tran);
@@ -117,15 +142,16 @@ public class Main {
         service.inscrireMedium(serena);
         service.inscrireMedium(m);
 
-       /* System.out.println();
         System.out.println("** Médiums après persistance: ");
+        
         afficherMedium(gwenaëlle);
         afficherMedium(tran);
         afficherMedium(irma);
         afficherMedium(endora);
         afficherMedium(serena);
         afficherMedium(m);
-        System.out.println();*/
+        
+        System.out.println();
     }
     
     
@@ -340,6 +366,10 @@ public class Main {
         String mdp="polucheisking";
         
         Client c=(Client) service.authentifierUtilisateur(mail,mdp);
+        
+        System.out.println("**** Client avant génération du profil ****");
+        afficherClient(c);
+        
         try{
             service.genererProfilAstral(c);
         }catch(IOException e){
@@ -354,6 +384,9 @@ public class Main {
             System.out.println("test générerProfilAStral échoué");
             System.out.println();
         }   
+        
+        System.out.println("**** Client après génération du profil ****");
+        afficherClient(c);
     }
    
     public static void testAjouterHistoriqueClient(String mail, String motDePasse)
@@ -404,14 +437,6 @@ public class Main {
          for (Consultation c : historique) {
              System.out.println(c);
          }
-    }
-    
-    public static void afficherMedium(Medium medium) {
-        System.out.println("-> " + medium);
-    }
-    
-    public static void afficherEmploye(Employe employe) {
-        System.out.println("-> " + employe);
     }
     
     public static void testerRechercheMedium() {

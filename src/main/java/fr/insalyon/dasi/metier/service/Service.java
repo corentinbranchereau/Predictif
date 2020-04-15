@@ -15,11 +15,13 @@ import fr.insalyon.dasi.metier.modele.Utilisateur;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.util.Pair;
@@ -65,7 +67,7 @@ public class Service {
                         + " PREDICT'IF. Rendez-vous vite sur notre site pour consulter votre profil astrologique et profiter"
                         + " des dons incroyables de nos médiums.");
             } else {
-                subject="EChec de l'inscription chez PREDICT'IF";
+                subject="Echec de l'inscription chez PREDICT'IF";
                 mailWriter.println("Bonjour "+utilisateur.getPrenom()+", votre inscription au service PREDICT'IF a"
                         + " malencontreusement échoué... Merci de recommencer ultérieurement.");
             }
@@ -310,7 +312,7 @@ public class Service {
                 consultation.setMedium(medium);
                 consultation.setEmploye(employeLibre);
              
-               consultation=ajouterConsultation(consultation);
+                consultation=ajouterConsultation(consultation);
                
                 StringWriter message = new StringWriter();
                 PrintWriter notificationWriter = new PrintWriter(message);
@@ -331,11 +333,55 @@ public class Service {
          return consultation;    
       }
       
-      public Consultation validerConsultation(Consultation consultation,Date dateDebut,Integer duree, String commentaire){ //revoie true si validation a fonctionne, false sinon
+      public Consultation commencerConsultation(Consultation consultation) {
+          
+            consultation.setDateDebut(new Date(System.currentTimeMillis()));
+        
+            Client cl = consultation.getClient();
+            Medium m = consultation.getMedium();
+            Employe e = consultation.getEmploye();
+            SimpleDateFormat calendarStyle = new SimpleDateFormat("'du' dd/MM/yy à hh:mm");
+            
+            JpaUtil.creerContextePersistance();
+            try {
+                JpaUtil.ouvrirTransaction();
+                cl=clientDao.modifier(consultation.getClient());
+                employeDao.modifier(consultation.getEmploye());
+                JpaUtil.validerTransaction();
+                
+                consultation=obtenirConsultationParId(consultation.getId());
+                
+                StringWriter message = new StringWriter();
+                PrintWriter notificationWriter = new PrintWriter(message);
+        
+                notificationWriter.println("Bonjour "+cl.getPrenom()+". J'ai bien reçu"
+                        + " votre demande de consultation "+ calendarStyle.format(consultation.getDateDebut())+"."
+                        + " Vous pouvez dès à présent me contacter au "+e.getTelephone()+". A tout de suite !"
+                        + "Médiumiquement votre, "+m.getDenomination());
+
+                Message.envoyerNotification(
+                        cl.getTelephone(),
+                        message.toString()
+                );
+                
+            } catch (Exception ex) {
+                Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
+                JpaUtil.annulerTransaction();
+
+                consultation=null;
+            }
+            finally {
+                JpaUtil.fermerContextePersistance();
+            }    
+            
+            return consultation;
+    }
+      
+    public Consultation validerConsultation(Consultation consultation, String commentaire){ //revoie true si validation a fonctionne, false sinon
         if( consultation!=null && consultation.getEmploye()!=null && consultation.getMedium()!=null 
-             && consultation.getClient()!=null && dateDebut!=null && duree!=null){
-              
-                consultation.setDateDebut(dateDebut);
+             && consultation.getClient()!=null){
+            
+                int duree = new Integer((int)(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()-consultation.getDateDebut().getTime())));
                 consultation.setDuree(duree);
                 consultation.setCommentaire(commentaire);
                 consultation.setEstTerminee(true);
@@ -346,13 +392,12 @@ public class Service {
                 JpaUtil.creerContextePersistance();
                 try {
                     JpaUtil.ouvrirTransaction();
-                    //consultation=consultationDao.modifier(consultation);   
                     Client c=clientDao.modifier(consultation.getClient());
                     employeDao.modifier(consultation.getEmploye());
-                    List<Consultation> listeConsultation=c.getConsultations();
-                    consultation=listeConsultation.get(listeConsultation.size()-1);
-                    
                     JpaUtil.validerTransaction();
+                    
+                    consultation=obtenirConsultationParId(consultation.getId());
+                    
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                     JpaUtil.annulerTransaction();
