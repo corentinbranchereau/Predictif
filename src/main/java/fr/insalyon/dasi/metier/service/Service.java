@@ -347,9 +347,10 @@ public class Service {
                 JpaUtil.ouvrirTransaction();
                 cl=clientDao.modifier(consultation.getClient());
                 employeDao.modifier(consultation.getEmploye());
-                JpaUtil.validerTransaction();
                 
-                consultation=obtenirConsultationParId(consultation.getId());
+                consultation=consultationDao.chercherParId(consultation.getId());
+                
+                JpaUtil.validerTransaction();
                 
                 StringWriter message = new StringWriter();
                 PrintWriter notificationWriter = new PrintWriter(message);
@@ -397,10 +398,10 @@ public class Service {
                     JpaUtil.ouvrirTransaction();
                     Client c=clientDao.modifier(consultation.getClient());
                     employeDao.modifier(consultation.getEmploye());
-                    JpaUtil.validerTransaction();
                     
-                    consultation=obtenirConsultationParId(consultation.getId());
+                    consultation=consultationDao.chercherParId(consultation.getId());
                     
+                    JpaUtil.validerTransaction();          
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                     JpaUtil.annulerTransaction();
