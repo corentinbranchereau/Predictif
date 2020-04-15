@@ -363,17 +363,20 @@ public class Service {
                         cl.getTelephone(),
                         message.toString()
                 );
-                
+            
+            System.out.println("service consultation: 1"+consultation);
             } catch (Exception ex) {
                 Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                 JpaUtil.annulerTransaction();
 
                 consultation=null;
+                System.out.println("service consultation: 2"+consultation);
             }
             finally {
                 JpaUtil.fermerContextePersistance();
+                System.out.println("service consultation: 3"+consultation);
             }    
-            
+             System.out.println("service consultation: 4"+consultation);
             return consultation;
     }
       
@@ -381,7 +384,7 @@ public class Service {
         if( consultation!=null && consultation.getEmploye()!=null && consultation.getMedium()!=null 
              && consultation.getClient()!=null){
             
-                int duree = new Integer((int)(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()-consultation.getDateDebut().getTime())));
+                int duree = (int)(TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()-consultation.getDateDebut().getTime()));
                 consultation.setDuree(duree);
                 consultation.setCommentaire(commentaire);
                 consultation.setEstTerminee(true);

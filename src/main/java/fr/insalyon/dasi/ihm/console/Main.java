@@ -34,7 +34,7 @@ public class Main {
         initialiserEmployes();
         
         /* 1 A LA FOIS */
-        //testCreerConsultation();
+        testCreerConsultation();
         //testInscrireClients();
         //testAuthentifierClient();
         //testGenererProfilAstral();
@@ -79,10 +79,13 @@ public class Main {
         Client ainoha=null ;
         Client sidi=null;
         Client michel=null;
+        Client anna=null;
         try{
              ainoha =new Client("Sing","Ainoha",Genre.Feminin,"ainoha.sing@free.fr","abahisgod123",simpleDateFormat.parse("11-09-1989"),"4 rue Phelypeayx, Villeurbanne","0509040503");
              sidi = new Client ("Parisi","Sidi",Genre.Masculin,"sidiparisi@orange.fr","123sidia",simpleDateFormat.parse("23-05-1999"),"4 avenue des grandes Herbes, Saint Michel","0102040306");
              michel = new Client ("Poluche","Michel",Genre.Masculin,"michelpouche@yahoo.fr","polucheisking",simpleDateFormat.parse("13-02-1965"),"4 avenue de la place, Avignon","0908650306");
+             anna = new Client ("Fredun","Anna",Genre.Feminin,"annafredun@yahoo.fr","ana345",simpleDateFormat.parse("12-01-1996"),"chemin des mouettes, Valence","0928350316");
+             
         }catch (ParseException e){
             System.out.println("Erreur: ParseException saisie des dates");
         } 
@@ -96,6 +99,7 @@ public class Main {
         service.inscrireUtilisateur(ainoha);
         service.inscrireUtilisateur(sidi);
         service.inscrireUtilisateur(michel);
+        service.inscrireUtilisateur(anna);
                
         System.out.println();
         System.out.println("** Clients après persistance: ");
@@ -182,11 +186,12 @@ public class Main {
         
         Service service = new Service();
         
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         
         Client client=(Client) service.authentifierUtilisateur("sidiparisi@orange.fr","123sidia");
         Client clientBis=(Client) service.authentifierUtilisateur("ainoha.sing@free.fr","abahisgod123");
         Client clientTierce=(Client) service.authentifierUtilisateur("michelpouche@yahoo.fr","polucheisking");
+        Client client4=(Client) service.authentifierUtilisateur("annafredun@yahoo.fr","ana345");
         
         Medium medium=service.detailMediumParId(Long.valueOf(1));
         Consultation consultation=service.demanderConsultation(client, medium);
@@ -195,54 +200,46 @@ public class Main {
         System.out.println();
         
         //TEST 2: choisi un employé qui n'est pas en consultation
-        Consultation consultationBis=service.demanderConsultation(clientBis, medium);
-        System.out.println("Consultation 2 crée avec un employé différent: "+consultationBis);
+        Consultation consultation2=service.demanderConsultation(clientBis, medium);
+        System.out.println("Consultation 2 crée avec un employé différent: "+consultation2);
          System.out.println();
        
          
         //TEST 3: refuse la création de la 4ème consultation car aucun employé dispo 
-         Consultation consultation3=service.demanderConsultation(consultation.getClient(), medium);
-         Consultation consultation4=null;
-        try{
-           consultation4=service.demanderConsultation(new Client("Lovelace", "Ada", Genre.Feminin ,"ada.lovelace@insa-lyon.fr", "Ada1012", simpleDateFormat.parse("26-04-1990") ," 2 rue de la croix", "0628196194"), medium);
-            System.out.println("Consultation 3 crée avec le même client que consultation 1 "+ consultation3);
-            System.out.println();
+         Consultation consultation3=service.demanderConsultation(clientTierce, medium);
+         System.out.println("Consultation 3 "+ consultation3);
+         System.out.println();
+         
+         
+         Consultation consultation4=service.demanderConsultation(client4, medium);
             System.out.println("Consultation 4 refusée : "+ consultation4);
             System.out.println();
-        }catch(ParseException e){}
+ 
+        // COMMENCEMENT DES CONSULTATIONS //
+        consultation=service.commencerConsultation(consultation);
+        System.out.println("commencement de consultation 1:"+consultation);
+        System.out.println();
+        
+        consultation2=service.commencerConsultation(consultation2);
+        System.out.println("commencement de consultation 2:"+consultation2);
+        System.out.println();
+        
+        consultation3=service.commencerConsultation(consultation3);
+        System.out.println("commencement de consultation 3:"+consultation3);
+        System.out.println();
+        
+        consultation=service.validerConsultation(consultation,"super séance");
+        consultation2=service.validerConsultation(consultation2,"un client charmant");
+        consultation3=service.validerConsultation(consultation3,"un moment très agréable");
+        
+        System.out.println("validation de consultation 1:"+consultation);
+        System.out.println();
+        System.out.println("validation de consultation 2:"+consultation2);
+        System.out.println();
+        System.out.println("validation de consultation 3:"+consultation3);
+        System.out.println();
         
         
-        
-        //TEST 4: Validation des consultations
-        
-        try{
-            consultation=service.validerConsultation(consultation, simpleDateFormat.parse("09-10-2020"),34,"super seance");
-            System.out.println(" 1ère Consultation terminée "+ consultation);
-        }catch(ParseException e){}
-       try{
-            System.out.println(" 2ème Consultation terminée "+ service.validerConsultation(consultationBis, simpleDateFormat.parse("09-11-2020"),15,"client ennuyant"));
-        }catch(ParseException e){}
-        try{
-            consultation3=service.validerConsultation(consultation3, simpleDateFormat.parse("09-10-2020"),15,"client rigolo");
-            System.out.println(" 3ème Consultation terminée "+ consultation3);
-        }catch(ParseException e){}
-         try{
-            System.out.println(" 4ème Consultation terminée - devrait échouer :"+ service.validerConsultation(consultation4, simpleDateFormat.parse("09-08-2020"),15,"client joyeux"));
-        }catch(ParseException e){}
-        
-       //TEST 3: choisi l'employé ayant le moins d'heure
-        Consultation consultation5=service.demanderConsultation(consultation3.getClient(), medium);
-         System.out.println("Consultation crée avec l'employé ayant le moins d'heure: "+consultation5);
-         try{
-            System.out.println(" Consultation 5 terminée "+ service.validerConsultation(consultation5, simpleDateFormat.parse("08-10-2020"),22,"ok"));
-        }catch(ParseException e){}
-         
-        //TEST 4: choisi l'employé avec le moins d'heure
-         Consultation consultation6=service.demanderConsultation(clientTierce,medium);
-         try{
-            System.out.println(" Consultation 6 terminée "+ service.validerConsultation(consultation6, simpleDateFormat.parse("02-11-2020"),16,"client très intéressant"));
-        }catch(ParseException e){}
-         
     }
     
     public static void testInscrireClients(){
@@ -612,7 +609,7 @@ public class Main {
             return;
         }
         
-        service.validerConsultation(consult1, new Date(System.currentTimeMillis()), new Integer(20), "pas mal!");
+        service.validerConsultation(consult1, "pas mal!");
         
         List<Pair<Medium,Long>> stats = service.ListeMediumConsultes();
         
@@ -675,7 +672,7 @@ public class Main {
             return;
         }
         
-        service.validerConsultation(consult1, new Date(System.currentTimeMillis()), new Integer(20), "pas mal!");
+        service.validerConsultation(consult1, "pas mal!");
         
         List<Pair<Employe,Long>> stats = service.ListeNombreClientParEmploye();
         
