@@ -125,11 +125,19 @@ public class Service {
          return utilisateur;
       }
     
-    public ProfilAstral genererProfilAstral(Client client) throws IOException{
+    public ProfilAstral genererProfilAstral(Client client){
          JpaUtil.creerContextePersistance();
          AstroTest astroApi = new AstroTest();
          ProfilAstral resultat = null;
-        List<String> profil = astroApi.getProfil(client.getPrenom(), client.getDateNaissance());
+        
+        List<String> profil;
+        try {
+            profil = astroApi.getProfil(client.getPrenom(), client.getDateNaissance());
+        } catch (IOException ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service GenererProfilAstral(client)", ex);
+            return null;
+        }
+        
         ProfilAstral profilClient=new ProfilAstral(profil.get(0),profil.get(1),profil.get(2),profil.get(3));
         try {
             JpaUtil.ouvrirTransaction();

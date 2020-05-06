@@ -8,6 +8,7 @@ import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
+import fr.insalyon.dasi.metier.modele.ProfilAstral;
 import fr.insalyon.dasi.metier.modele.Spirite;
 import fr.insalyon.dasi.metier.service.Service;
 import java.io.IOException;
@@ -29,12 +30,12 @@ public class Main {
         JpaUtil.init();
         
         /* Toujours initialiser */
-        initialiserClients();
-        initialiserMediums();
-        initialiserEmployes();
+        //initialiserClients();
+        //initialiserMediums();
+        //initialiserEmployes();
         
         /* 1 A LA FOIS */
-        testCreerConsultation();
+        //testCreerConsultation();
         //testInscrireClients();
         //testAuthentifierClient();
         //testGenererProfilAstral();
@@ -367,12 +368,10 @@ public class Main {
         System.out.println("**** Client avant génération du profil ****");
         afficherClient(c);
         
-        try{
-            service.genererProfilAstral(c);
-        }catch(IOException e){
-            System.err.print("erreur testerProfilAstral");
-        }
-        if(c!=null){
+        
+        ProfilAstral a = service.genererProfilAstral(c);
+        
+        if(c!=null && a!=null){
             System.out.println();
             System.out.println("test générerProfilAStral réussie");
             System.out.println();
