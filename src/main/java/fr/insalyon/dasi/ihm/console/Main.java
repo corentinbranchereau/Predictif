@@ -49,7 +49,9 @@ public class Main {
         //testerAuthentificationEmploye();
         //testStatistiquesMediumConsultes();
         //testStatistiquesClientsParEmploye();
-  
+        
+        //ajouterConsultations("thibaut.gravey@insa-lyon.fr","test123");
+        //testObtenirHistoriqueClient("thibaut.gravey@insa-lyon.fr","test123");
         JpaUtil.destroy();
         
     }
@@ -108,6 +110,11 @@ public class Main {
         afficherClient(sidi);
         afficherClient(michel);
         System.out.println();
+        
+        service.genererProfilAstral(ainoha);
+        service.genererProfilAstral(sidi);
+        service.genererProfilAstral(michel);
+        service.genererProfilAstral(anna);
     }
     
     public static void initialiserMediums() {
@@ -181,6 +188,29 @@ public class Main {
         System.out.println("** Les Employes sont bien inscrit");
         
         System.out.println();
+    }
+      
+    public static void ajouterConsultations(String id, String mdp){
+        Service service = new Service();
+        
+        Client client=(Client) service.authentifierUtilisateur(id,mdp);
+        
+        if(client==null)
+        {
+            System.out.println("Pas de client loggé");
+            return;
+        }
+        
+        Medium medium1=service.detailMediumParId(Long.valueOf(1));
+        Medium medium2=service.detailMediumParId(Long.valueOf(2));
+        
+        Consultation consultation1=service.demanderConsultation(client, medium1);
+        consultation1=service.commencerConsultation(consultation1);
+        consultation1=service.validerConsultation(consultation1,"super séance");
+        
+        Consultation consultation2=service.demanderConsultation(client, medium2);
+        consultation2=service.commencerConsultation(consultation2);
+        consultation2=service.validerConsultation(consultation2,"client vraiment casse couilles");
     }
       
     public static void testCreerConsultation(){
@@ -428,7 +458,7 @@ public class Main {
         
         Client client = (Client) service.authentifierUtilisateur(mail, motDePasse);
         
-        List<Consultation> historique=client.getConsultations();
+        List<Consultation> historique= service.HistoriqueClientTrié(client);
         
          for (Consultation c : historique) {
              System.out.println(c);
