@@ -35,7 +35,7 @@ public class ConsultationDao {
 
     public List<Pair<Medium, Long>> CompterConsultationParMedium() {
         EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Object[]> query = em.createQuery("SELECT m, COUNT(c) FROM Consultation c JOIN c.medium m WHERE c.estTerminée = TRUE GROUP BY(m) ORDER BY COUNT(c) DESC, m.denomination", Object[].class);
+        TypedQuery<Object[]> query = em.createQuery("SELECT m, COUNT(c) FROM Consultation c JOIN c.medium m WHERE c.estTerminee = TRUE GROUP BY(m) ORDER BY COUNT(c) DESC, m.denomination", Object[].class);
         List<Object[]> list = query.getResultList();
         List<Pair<Medium, Long>> resultat = new ArrayList();
         for(Object[] o : list) {
