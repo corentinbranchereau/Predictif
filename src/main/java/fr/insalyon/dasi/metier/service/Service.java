@@ -1,4 +1,4 @@
-package fr.insalyon.dasi.metier.service;
+ package fr.insalyon.dasi.metier.service;
 
 import fr.insalyon.dasi.dao.ClientDao;
 import fr.insalyon.dasi.dao.ConsultationDao;
@@ -263,13 +263,13 @@ public class Service {
             if(consultation.getClient() !=null && consultation.getEmploye() !=null && consultation.getMedium() !=null){      
                 JpaUtil.creerContextePersistance();
                 try {
-                    JpaUtil.ouvrirTransaction();     
-                    Client c=clientDao.modifier(consultation.getClient());
+                    JpaUtil.ouvrirTransaction();
+                    consultationDao.creer(consultation);
+                    clientDao.modifier(consultation.getClient());
                     employeDao.modifier(consultation.getEmploye());
+                    
                     JpaUtil.validerTransaction();
                     
-                    List<Consultation> list=c.getConsultations();
-                    resultat = list.get(list.size()-1);
                 } catch (Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
                     JpaUtil.annulerTransaction();
@@ -280,7 +280,7 @@ public class Service {
                 }      
             }
         }
-        return resultat;
+        return consultation;
     }
     
       public Consultation demanderConsultation(Client client, Medium medium){ //renvoie la consultation crée avec l'employé assigné 
@@ -353,11 +353,7 @@ public class Service {
             JpaUtil.creerContextePersistance();
             try {
                 JpaUtil.ouvrirTransaction();
-                cl=clientDao.modifier(consultation.getClient());
-                employeDao.modifier(consultation.getEmploye());
-                
-                consultation=consultationDao.chercherParId(consultation.getId());
-                
+                consultation=consultationDao.modifier(consultation);
                 JpaUtil.validerTransaction();
                 
                 StringWriter message = new StringWriter();
@@ -400,14 +396,11 @@ public class Service {
                 JpaUtil.creerContextePersistance();
                 try {
                     JpaUtil.ouvrirTransaction();
-                    Client c=clientDao.modifier(consultation.getClient());
-                    employeDao.modifier(consultation.getEmploye());
-                    
-                    consultation=consultationDao.chercherParId(consultation.getId());
-                    
-                    JpaUtil.validerTransaction();          
+                    employeDao.modifier(employe);
+                    consultation=consultationDao.modifier(consultation);
+                    JpaUtil.validerTransaction();
                 } catch (Exception ex) {
-                    Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service ajouterConsultation()", ex);
+                    Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service validerConsultation()", ex);
                     JpaUtil.annulerTransaction();
                     
                     consultation=null;
@@ -417,7 +410,9 @@ public class Service {
                 }      
               
                 
-            }
+            }else{
+            System.out.println("Erreur: des valeurs nulles ne permettent pas la validation de la consultation");
+        }
          return consultation;
       }
       

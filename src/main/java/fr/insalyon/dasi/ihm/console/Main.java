@@ -30,12 +30,12 @@ public class Main {
         JpaUtil.init();
         
         /* Toujours initialiser */
-        //initialiserClients();
-        //initialiserMediums();
-        //initialiserEmployes();
+        initialiserClients();
+        initialiserMediums();
+        initialiserEmployes();
         
         /* 1 A LA FOIS */
-        //testCreerConsultation();
+        testCreerConsultation();
         //testInscrireClients();
         //testAuthentifierClient();
         //testGenererProfilAstral();
@@ -220,8 +220,8 @@ public class Main {
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         
         Client client=(Client) service.authentifierUtilisateur("sidiparisi@orange.fr","123sidia");
-        Client clientBis=(Client) service.authentifierUtilisateur("ainoha.sing@free.fr","abahisgod123");
-        Client clientTierce=(Client) service.authentifierUtilisateur("michelpouche@yahoo.fr","polucheisking");
+        Client client2=(Client) service.authentifierUtilisateur("ainoha.sing@free.fr","abahisgod123");
+        Client client3=(Client) service.authentifierUtilisateur("michelpouche@yahoo.fr","polucheisking");
         Client client4=(Client) service.authentifierUtilisateur("annafredun@yahoo.fr","ana345");
         
         Medium medium=service.detailMediumParId(Long.valueOf(1));
@@ -231,13 +231,13 @@ public class Main {
         System.out.println();
         
         //TEST 2: choisi un employé qui n'est pas en consultation
-        Consultation consultation2=service.demanderConsultation(clientBis, medium);
+        Consultation consultation2=service.demanderConsultation(client2, medium);
         System.out.println("Consultation 2 crée avec un employé différent: "+consultation2);
          System.out.println();
        
          
         //TEST 3: refuse la création de la 4ème consultation car aucun employé dispo 
-         Consultation consultation3=service.demanderConsultation(clientTierce, medium);
+         Consultation consultation3=service.demanderConsultation(client3, medium);
          System.out.println("Consultation 3 "+ consultation3);
          System.out.println();
          
@@ -270,7 +270,52 @@ public class Main {
         System.out.println("consultation 3 non terminée, Employé toujours pas dispo:"+consultation3.getEmploye());
         System.out.println();
         
+        //Initialisation en masse
+        Consultation consultation5=service.demanderConsultation(client, medium);
+        //consultation5=service.obtenirConsultationParId(consultation5.getId());
+        consultation5=service.commencerConsultation(consultation5);
+        //consultation5=service.obtenirConsultationParId(consultation5.getId());
+        service.validerConsultation(consultation5,"Ce client est génial");
         
+        Consultation consultation6=service.demanderConsultation(client, medium);
+        consultation6=service.commencerConsultation(consultation6);
+        service.validerConsultation(consultation6,"Tip top");
+        
+        Consultation consultation7=service.demanderConsultation(client, medium);
+        consultation7=service.commencerConsultation(consultation7);
+        service.validerConsultation(consultation7,"Ce client est intéressant");
+        
+        Consultation consultation8=service.demanderConsultation(client2, medium);
+        consultation8=service.commencerConsultation(consultation8);
+        service.validerConsultation(consultation8,"conversation passionnante");
+        
+        Consultation consultation9=service.demanderConsultation(client2, medium);
+        consultation9=service.commencerConsultation(consultation9);
+        service.validerConsultation(consultation9,"bof, un peu ennuyant");
+        
+        Consultation consultation10=service.demanderConsultation(client2, medium);
+        consultation10=service.commencerConsultation(consultation10);
+        service.validerConsultation(consultation10,"il adore le soleil");
+        
+        Consultation consultation11=service.demanderConsultation(client3, medium);
+        consultation11=service.commencerConsultation(consultation11);
+        service.validerConsultation(consultation11,"couleur prefere: rouge");
+        
+        Consultation consultation12=service.demanderConsultation(client3, medium);
+        consultation12=service.commencerConsultation(consultation12);
+        service.validerConsultation(consultation12,"vraiment pas sympa");
+        
+        Consultation consultation13=service.demanderConsultation(client3, medium);
+        consultation13=service.commencerConsultation(consultation13);
+        service.validerConsultation(consultation13,"J'ai adoré ce moment");
+        
+        Consultation consultation14=service.demanderConsultation(client4, medium);
+        consultation14=service.commencerConsultation(consultation14);
+        service.validerConsultation(consultation14,"Ce client est génial");
+        
+        Consultation consultation15=service.demanderConsultation(client4, medium);
+        consultation15=service.commencerConsultation(consultation15);
+        service.validerConsultation(consultation15,"adore discuter!");
     }
     
     public static void testInscrireClients(){

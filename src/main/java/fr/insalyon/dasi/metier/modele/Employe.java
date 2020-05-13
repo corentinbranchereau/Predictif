@@ -18,7 +18,7 @@ public class Employe extends Utilisateur implements Serializable {
     private boolean estDisponible;
     private Integer tempsTravail;
     
-    @OneToMany(mappedBy="employe",cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(mappedBy="employe")
     private List<Consultation> consultations;
 
     protected Employe() {

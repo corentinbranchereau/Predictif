@@ -25,7 +25,7 @@ public class Client extends Utilisateur implements Serializable {
     @OneToOne
     private ProfilAstral profilAstral;
     
-    @OneToMany(mappedBy="client", cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(mappedBy="client")
     private List<Consultation> consultations;
 
     protected Client() {
