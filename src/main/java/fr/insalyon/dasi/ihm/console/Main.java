@@ -30,12 +30,12 @@ public class Main {
         JpaUtil.init();
         
         /* Toujours initialiser */
-        initialiserClients();
-        initialiserMediums();
-        initialiserEmployes();
+        //initialiserClients();
+        //initialiserMediums();
+        //initialiserEmployes();
         
         /* 1 A LA FOIS */
-        testCreerConsultation();
+        //testCreerConsultation();
         //testInscrireClients();
         //testAuthentifierClient();
         //testGenererProfilAstral();

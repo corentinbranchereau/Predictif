@@ -308,7 +308,7 @@ public class Service {
             Iterator<Employe> iterator=listeEmployes.iterator();
             while(iterator.hasNext() && employeLibre==null){
                 Employe e=iterator.next();
-                if(e.isEstDisponible()){
+                if(e.isEstDisponible() && e.getGenre()==medium.getGenre()){
                     employeLibre=e;
                 }
             }
